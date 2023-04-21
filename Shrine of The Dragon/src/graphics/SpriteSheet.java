@@ -2,6 +2,9 @@ package graphics;
 
 import main.MainPanel;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 public class SpriteSheet {
@@ -15,7 +18,5 @@ public class SpriteSheet {
     public BufferedImage crop(int x, int y){
         return spriteSheet.getSubimage(x * mp.tileSize, y * mp.tileSize,mp.tileSize,mp.tileSize);
     }
-
-
 
 }

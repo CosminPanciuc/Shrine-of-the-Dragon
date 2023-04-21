@@ -13,12 +13,14 @@ public class Rock extends StationaryEntity{
 
     public Rock(MainPanel mp, String type, int cordX, int cordY){
         SpriteSheet spriteSheet = new SpriteSheet(mp, ImageLoader.LoadImage("/tiles/48x48.png"));
+        size = type;
         switch (type){
             case "Small" -> {
                 hitBox = new Rectangle(9,9,30,30);
                 texture.add(spriteSheet.crop(5,0));
                 rowNumber = 1;
                 colNumber = 1;
+                hitPoints = 3;
             }
             case "Big" -> {
                 hitBox = new Rectangle(14,24, 70,46);
@@ -30,6 +32,7 @@ public class Rock extends StationaryEntity{
 
                 rowNumber = 2;
                 colNumber = 2;
+                hitPoints = 5;
             }
         }
         this.mp = mp;

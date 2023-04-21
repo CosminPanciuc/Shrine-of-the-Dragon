@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class MovableEntity extends Entity{
@@ -7,6 +8,7 @@ public class MovableEntity extends Entity{
     public String direction;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 
+    public Rectangle actionArea = new Rectangle(0,0,0,0);
     public int spriteCounter = 0;
     public int spriteNumber = 1;
 }

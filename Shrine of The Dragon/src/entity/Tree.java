@@ -9,10 +9,11 @@ import java.awt.*;
 public class Tree extends StationaryEntity{
     public Tree(MainPanel mp, String type, int cordX, int cordY){
         SpriteSheet spriteSheet = new SpriteSheet(mp, ImageLoader.LoadImage("/tiles/48x48.png"));
+        size = type;
         switch(type) {
             case "Small" ->{
                 hitBox = new Rectangle(9, 9, 30, 30);
-
+                hitPoints = 3;
             }
             case "Big" ->{
                 hitBox = new Rectangle(48,110, 50,40);
@@ -35,6 +36,7 @@ public class Tree extends StationaryEntity{
                 rowNumber = 4;
                 colNumber = 4;
 
+                hitPoints = 5;
             }
         }
         this.mp = mp;

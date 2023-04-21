@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class StationaryEntity extends Entity{
     public int hitPoints;
+    public String size;
     MainPanel mp;
     public ArrayList<BufferedImage> texture = new ArrayList<BufferedImage>();
     int rowNumber;

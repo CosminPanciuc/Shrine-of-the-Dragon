@@ -1,8 +1,10 @@
 package main;
 
-import entity.Entity;
-import entity.MovableEntity;
-import entity.StationaryEntity;
+import entity.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class CollisionChecker {
 
@@ -103,6 +105,70 @@ public class CollisionChecker {
             entity.hitBox.y = defaultEntityHBY;
             stationaryEntity.hitBox.x = defaultObjX;
             stationaryEntity.hitBox.y = defaultObjY;
+        }
+    }
+    public void checkPlayerInteraction(Player player, String selectedTool){
+        ArrayList<StationaryEntity> temp = new ArrayList<>();
+        for(StationaryEntity stationaryEntity: mp.stationaryEntities) {
+
+            int currentWorldX = player.worldX;
+            int currentWorldY = player.worldY;
+            int hitBoxWidth = player.hitBox.width;
+            int hitBoxHeight = player.hitBox.height;
+
+            switch (player.actionDirection){
+                case "Up" -> player.worldY -= player.actionArea.height;
+                case "Down" -> player.worldY += player.actionArea.height;
+                case "Left" -> player.worldX -= player.actionArea.width;
+                case "Right" -> player.worldX += player.actionArea.width;
+            }
+
+
+            int defaultEntityHBX = player.hitBox.x;
+            int defaultEntityHBY = player.hitBox.y;
+            int defaultObjX = stationaryEntity.hitBox.x;
+            int defaultObjY = stationaryEntity.hitBox.y;
+
+            player.hitBox.x = player.worldX + player.hitBox.x;
+            player.hitBox.y = player.worldY + player.hitBox.y;
+
+            stationaryEntity.hitBox.x = stationaryEntity.worldX + stationaryEntity.hitBox.x;
+            stationaryEntity.hitBox.y = stationaryEntity.worldY + stationaryEntity.hitBox.y;
+
+            if (player.hitBox.intersects(stationaryEntity.hitBox)) {
+                switch (selectedTool){
+                    case "Axe" ->{
+                        if(stationaryEntity.getClass() == Tree.class){
+                            if(Objects.equals(stationaryEntity.size, "Big") && player.axeQuality > 1)
+                                stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.axeQuality - 1;
+                            else if(Objects.equals(stationaryEntity.size, "Small"))
+                                stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.axeQuality;
+                        }
+                    }
+                    case "Pickaxe" ->{
+                        if(stationaryEntity.getClass() == Rock.class)
+                            if(Objects.equals(stationaryEntity.size, "Big") && player.pickaxeQuality > 1)
+                                stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.pickaxeQuality - 1;
+                            else if(Objects.equals(stationaryEntity.size, "Small"))
+                                stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.pickaxeQuality;
+                    }
+                }
+            }
+            if(stationaryEntity.hitPoints <= 0){
+                temp.add(stationaryEntity);
+            }
+            player.hitBox.x = defaultEntityHBX;
+            player.hitBox.y = defaultEntityHBY;
+            stationaryEntity.hitBox.x = defaultObjX;
+            stationaryEntity.hitBox.y = defaultObjY;
+
+            player.worldX = currentWorldX;
+            player.worldY = currentWorldY;
+            player.hitBox.width = hitBoxWidth;
+            player.hitBox.height = hitBoxHeight;
+        }
+        for(StationaryEntity stationaryEntity:temp){
+            mp.stationaryEntities.remove(stationaryEntity);
         }
     }
 }

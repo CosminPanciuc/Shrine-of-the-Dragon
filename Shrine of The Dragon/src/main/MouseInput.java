@@ -5,6 +5,12 @@ import java.awt.event.MouseListener;
 
 public class MouseInput implements MouseListener {
 
+    public int mouseX;
+    public int mouseY;
+    public boolean middleButtonPressed = false;
+    public boolean rightButtonPressed = false;
+    public boolean leftButtonPressed = false;
+
     @Override
     public void mouseClicked(MouseEvent e) {
 
@@ -12,14 +18,35 @@ public class MouseInput implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int mx = e.getX();
-        int my = e.getY();
-        System.out.println(mx);
-        System.out.println(my);
+        mouseX = e.getX();
+        mouseY = e.getY();
+        switch (e.getButton()){
+            case MouseEvent.BUTTON1 -> {
+                leftButtonPressed = true;
+            }
+            case MouseEvent.BUTTON2 -> {
+                middleButtonPressed = true;
+            }
+            case MouseEvent.BUTTON3 -> {
+                rightButtonPressed = true;
+            }
+        }
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        switch (e.getButton()){
+            case MouseEvent.BUTTON1 -> {
+                leftButtonPressed = false;
+            }
+            case MouseEvent.BUTTON2 -> {
+                middleButtonPressed = false;
+            }
+            case MouseEvent.BUTTON3 -> {
+                rightButtonPressed = false;
+            }
+        }
 
     }
 

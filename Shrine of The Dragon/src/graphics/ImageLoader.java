@@ -1,6 +1,9 @@
 package graphics;
 
+import main.MainPanel;
+
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -10,7 +13,6 @@ public class ImageLoader {
 
         try
         {
-
             return ImageIO.read(ImageLoader.class.getResource(path));
         }
         catch(IOException e){

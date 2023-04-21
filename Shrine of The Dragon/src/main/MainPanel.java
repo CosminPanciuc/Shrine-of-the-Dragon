@@ -19,8 +19,8 @@ public class MainPanel extends JPanel implements Runnable{
     public final int tileSize = ogTileSize * scale; // upscale to 48px square tile
     public final int screenTileColCount = 16;
     public final int screenTileRowCount = 12;
-    final int screenWidth = tileSize * screenTileColCount;
-    final int screenHeight = tileSize * screenTileRowCount;
+    final public int screenWidth = tileSize * screenTileColCount;
+    final public int screenHeight = tileSize * screenTileRowCount;
 
     //WORLD
     public final int maxWorldCol = 32;
@@ -53,6 +53,7 @@ public class MainPanel extends JPanel implements Runnable{
         this.setFocusable(true);
         stationaryEntities.add(new Rock(this,"Big",19,19));
         stationaryEntities.add(new Tree(this, "Big",24,4));
+        stationaryEntities.add(new Rock(this,"Small",15,16));
     }
 
     public void startGameThread(){
