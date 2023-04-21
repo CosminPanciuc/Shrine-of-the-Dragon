@@ -4,21 +4,24 @@ import graphics.ImageLoader;
 import graphics.SpriteSheet;
 import main.KeyInput;
 import main.MainPanel;
+import main.MouseInput;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Player extends Entity {
+public class Player extends MovableEntity{
     MainPanel mp;
     KeyInput key;
-
+    MouseInput mouse;
     public final int screenX;
     public final int screenY;
+    String selectedTool = "";
 
-    public Player(MainPanel mp, KeyInput key){
+    public Player(MainPanel mp, KeyInput key, MouseInput mouse){
         this.mp = mp;
         this.key = key;
+        this.mouse = mouse;
 
         screenX = (mp.screenTileColCount * mp.tileSize)/2 - (mp.tileSize/2);
         screenY = (mp.screenTileRowCount * mp.tileSize)/2 - (mp.tileSize/2);
@@ -60,8 +63,11 @@ public class Player extends Entity {
             if(key.dPressed){
                 direction = "right";
             }
+
             collision = false;
+            //
             mp.collisionChecker.checkTile(this);
+            mp.collisionChecker.checkEntity(this);
 
             if(!collision){
                 switch (direction) {

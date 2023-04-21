@@ -59,7 +59,7 @@ public class TileManager {
         tile[2] = new Tile();
         tile[2].texture = spriteSheet.crop(9,0);
         tile[3] = new Tile();
-        tile[3].texture = spriteSheet.crop(5,0);
+        tile[3].texture = spriteSheet.crop(11,0);
         tile[3].collision = true;
     }
 
