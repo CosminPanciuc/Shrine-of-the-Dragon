@@ -1,7 +1,6 @@
 package entity;
 
 import graphics.ImageLoader;
-import graphics.ImageScaleUtil;
 import graphics.SpriteSheet;
 import main.KeyInput;
 import main.MainPanel;
@@ -10,6 +9,7 @@ import main.MouseInput;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Player extends MovableEntity{
     MainPanel mp;
@@ -18,7 +18,6 @@ public class Player extends MovableEntity{
     public final int screenX;
     public final int screenY;
     String selectedTool = "Pickaxe";
-    public String actionDirection = "";
 
     public int axeQuality = 1;
     public int pickaxeQuality = 1;
@@ -36,6 +35,7 @@ public class Player extends MovableEntity{
         hitBox = new Rectangle(9,9,30,30);
         actionArea.width = 30;
         actionArea.height = 30;
+        healthPool = 100;
 
         setDefault();
         getPlayerImage();
@@ -48,7 +48,6 @@ public class Player extends MovableEntity{
         direction = "down";
     }
     public void getPlayerImage(){
-        ImageScaleUtil util = new ImageScaleUtil();
         SpriteSheet sheet = new SpriteSheet(mp, ImageLoader.LoadImage("/player/BasicCharacterSpritesheet.png"));
         up1 = sheet.crop(0,1);
         up2 = sheet.crop(1,1);
@@ -59,18 +58,45 @@ public class Player extends MovableEntity{
         right1 = sheet.crop(0,3);
         right2 = sheet.crop(1,3);
         SpriteSheet sheet1 = new SpriteSheet(mp, ImageLoader.LoadImage("/player/Basic Charakter Actions.png"));
-        //TODO fix image scaling draw position
         for(int i=0; i < 12; ++i)
             for(int j = 0; j < 2; ++j)
-                actionImage.add(util.scaleImage(sheet1.crop(j,i),144,144));
+                actionImage.add(sheet1.scaleImage(sheet1.crop(j,i),144,144));
                 //actionImage.add(sheet1.crop(j,i));
     }
 
     public void update(){
         playerMovement();
         mouseAction();
+        setSelectedTool();
     }
 
+    public void setSelectedTool(){
+        switch (key.numberPressed){
+            case 1 -> {
+                selectedTool = "Axe";
+                axeQuality = 1;
+            }
+            case 2 -> {
+                selectedTool = "Pickaxe";
+                pickaxeQuality = 1;
+            }
+            case 3 -> {
+                selectedTool = "Axe";
+                axeQuality = 2;
+            }
+            case 4 -> {
+                selectedTool = "Pickaxe";
+                pickaxeQuality = 2;
+            }
+            case 5-> {
+                selectedTool = "Sword";
+                damage = 5;
+            }
+            case 6-> {
+                selectedTool = "Hoe";
+            }
+        }
+    }
     public void playerMovement(){
         if(key.wPressed || key.sPressed || key.aPressed || key.dPressed){
             if(key.wPressed){
@@ -126,6 +152,11 @@ public class Player extends MovableEntity{
             }
 
             mp.collisionChecker.checkPlayerInteraction(this, this.selectedTool);
+            if(Objects.equals(selectedTool, "Hoe"))
+                mp.collisionChecker.checkTileHit(this);
+
+            if(Objects.equals(selectedTool, "Sword"))
+                mp.collisionChecker.checkHit(this);
         }
         if(mouse.middleButtonPressed)
             System.out.println("Middle button = " + mouse.mouseX + " " + mouse.mouseY);
@@ -150,7 +181,6 @@ public class Player extends MovableEntity{
         }
     }
     public void draw(Graphics2D playerGraphics){
-        //TO FIX 1/2 px diff in first column char sprites
         BufferedImage image = null;
         if(mouse.leftButtonPressed){
             switch (selectedTool){
@@ -178,12 +208,12 @@ public class Player extends MovableEntity{
                 case "Axe" ->{
                     switch (actionDirection){
                         case "Up" -> {
-                            if(spriteNumber == 1){image = actionImage.get(8);}
-                            if (spriteNumber == 2) {image = actionImage.get(9);}
-                        }
-                        case "Down" -> {
                             if(spriteNumber == 1){image = actionImage.get(10);}
                             if (spriteNumber == 2) {image = actionImage.get(11);}
+                        }
+                        case "Down" -> {
+                            if(spriteNumber == 1){image = actionImage.get(8);}
+                            if (spriteNumber == 2) {image = actionImage.get(9);}
                         }
                         case "Right" ->{
                             if(spriteNumber == 1){image = actionImage.get(14);}

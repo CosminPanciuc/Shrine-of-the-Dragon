@@ -12,7 +12,7 @@ public class Main {
         window.setResizable(false);
         window.setTitle("Shrine of The Dragon");
 
-        MainPanel panel = new MainPanel();
+        MainPanel panel = MainPanel.getInstance();
         window.add(panel);
         window.pack();
 

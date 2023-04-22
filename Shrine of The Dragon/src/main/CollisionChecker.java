@@ -70,6 +70,7 @@ public class CollisionChecker {
             int defaultEntityHBY = entity.hitBox.y;
             int defaultObjX = stationaryEntity.hitBox.x;
             int defaultObjY = stationaryEntity.hitBox.y;
+
             entity.hitBox.x = entity.worldX + entity.hitBox.x;
             entity.hitBox.y = entity.worldY + entity.hitBox.y;
             stationaryEntity.hitBox.x = stationaryEntity.worldX + stationaryEntity.hitBox.x;
@@ -105,6 +106,50 @@ public class CollisionChecker {
             entity.hitBox.y = defaultEntityHBY;
             stationaryEntity.hitBox.x = defaultObjX;
             stationaryEntity.hitBox.y = defaultObjY;
+        }
+
+        for(MovableEntity movableEntity: mp.movableEntities) {
+
+            int defaultEntityHBX = entity.hitBox.x;
+            int defaultEntityHBY = entity.hitBox.y;
+            int defaultObjX = movableEntity.hitBox.x;
+            int defaultObjY = movableEntity.hitBox.y;
+
+            entity.hitBox.x = entity.worldX + entity.hitBox.x;
+            entity.hitBox.y = entity.worldY + entity.hitBox.y;
+            movableEntity.hitBox.x = movableEntity.worldX + movableEntity.hitBox.x;
+            movableEntity.hitBox.y = movableEntity.worldY + movableEntity.hitBox.y;
+
+            switch (entity.direction) {
+                case "up" -> {
+                    entity.hitBox.y -= entity.speed;
+                    if (entity.hitBox.intersects(movableEntity.hitBox)) {
+                        entity.collision = true;
+                    }
+                }
+                case "down" -> {
+                    entity.hitBox.y += entity.speed;
+                    if (entity.hitBox.intersects(movableEntity.hitBox)) {
+                        entity.collision = true;
+                    }
+                }
+                case "right" -> {
+                    entity.hitBox.x += entity.speed;
+                    if (entity.hitBox.intersects(movableEntity.hitBox)) {
+                        entity.collision = true;
+                    }
+                }
+                case "left" -> {
+                    entity.hitBox.x -= entity.speed;
+                    if (entity.hitBox.intersects(movableEntity.hitBox)) {
+                        entity.collision = true;
+                    }
+                }
+            }
+            entity.hitBox.x = defaultEntityHBX;
+            entity.hitBox.y = defaultEntityHBY;
+            movableEntity.hitBox.x = defaultObjX;
+            movableEntity.hitBox.y = defaultObjY;
         }
     }
     public void checkPlayerInteraction(Player player, String selectedTool){
@@ -169,6 +214,127 @@ public class CollisionChecker {
         }
         for(StationaryEntity stationaryEntity:temp){
             mp.stationaryEntities.remove(stationaryEntity);
+        }
+    }
+    public void checkHit(MovableEntity entity){
+        ArrayList<MovableEntity> temp = new ArrayList<>();
+
+        for(MovableEntity movableEntity: mp.movableEntities){
+
+            int currentWorldX = entity.worldX;
+            int currentWorldY = entity.worldY;
+            int hitBoxWidth = entity.hitBox.width;
+            int hitBoxHeight = entity.hitBox.height;
+
+            switch (entity.actionDirection){
+                case "Up" -> entity.worldY -= entity.actionArea.height;
+                case "Down" -> entity.worldY += entity.actionArea.height;
+                case "Left" -> entity.worldX -= entity.actionArea.width;
+                case "Right" -> entity.worldX += entity.actionArea.width;
+            }
+
+
+            int defaultEntityHBX = entity.hitBox.x;
+            int defaultEntityHBY = entity.hitBox.y;
+            int defaultObjX = movableEntity.hitBox.x;
+            int defaultObjY = movableEntity.hitBox.y;
+
+            entity.hitBox.x = entity.worldX + entity.hitBox.x;
+            entity.hitBox.y = entity.worldY + entity.hitBox.y;
+
+            movableEntity.hitBox.x = movableEntity.worldX + movableEntity.hitBox.x;
+            movableEntity.hitBox.y = movableEntity.worldY + movableEntity.hitBox.y;
+
+            if (entity.hitBox.intersects(movableEntity.hitBox)){
+                movableEntity.healthPool -= entity.damage;
+                System.out.println("I am hitting");
+            }
+
+            if(movableEntity.healthPool <= 0){
+                temp.add(movableEntity);
+            }
+
+            entity.hitBox.x = defaultEntityHBX;
+            entity.hitBox.y = defaultEntityHBY;
+            movableEntity.hitBox.x = defaultObjX;
+            movableEntity.hitBox.y = defaultObjY;
+
+            entity.worldX = currentWorldX;
+            entity.worldY = currentWorldY;
+            entity.hitBox.width = hitBoxWidth;
+            entity.hitBox.height = hitBoxHeight;
+        }
+
+        for(MovableEntity movableEntity: temp){
+            mp.movableEntities.remove(movableEntity);
+        }
+    }
+
+    public void checkTileHit(MovableEntity entity){
+        switch (entity.actionDirection){
+            case "Up" -> {
+                int newEntityX = (entity.worldX)/mp.tileSize;
+                int newEntityY = (entity.worldY - 48)/mp.tileSize;
+                if(mp.tileManager.tile[mp.tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
+                    boolean found = false;
+                    for(StationaryEntity stationaryEntity: mp.stationaryEntities){
+                        if(stationaryEntity.worldX/mp.tileSize == newEntityX && stationaryEntity.worldY/mp.tileSize == newEntityY){
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found)
+                        mp.stationaryEntities.add(new Soil(mp,newEntityX,newEntityY));
+                }
+            }
+
+            case "Down" -> {
+                int newEntityX = (entity.worldX)/mp.tileSize;
+                int newEntityY = (entity.worldY + 48)/mp.tileSize;
+                if(mp.tileManager.tile[mp.tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
+                    boolean found = false;
+                    for(StationaryEntity stationaryEntity: mp.stationaryEntities){
+                        if(stationaryEntity.worldX/mp.tileSize == newEntityX && stationaryEntity.worldY/mp.tileSize == newEntityY){
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found)
+                        mp.stationaryEntities.add(new Soil(mp,newEntityX, newEntityY));
+                }
+            }
+
+            case "Right" -> {
+                int newEntityX = (entity.worldX + 48)/mp.tileSize;
+                int newEntityY = (entity.worldY)/mp.tileSize;
+                if(mp.tileManager.tile[mp.tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
+                    boolean found = false;
+                    for(StationaryEntity stationaryEntity: mp.stationaryEntities){
+                        if(stationaryEntity.worldX/mp.tileSize  == newEntityX && stationaryEntity.worldY/mp.tileSize == newEntityY){
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found)
+                        mp.stationaryEntities.add(new Soil(mp,newEntityX, newEntityY));
+                }
+            }
+
+            case "Left" -> {
+                int newEntityX = (entity.worldX - 48)/mp.tileSize;
+                int newEntityY = (entity.worldY)/mp.tileSize;
+                if(mp.tileManager.tile[mp.tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
+                    boolean found = false;
+                    for(StationaryEntity stationaryEntity: mp.stationaryEntities){
+                        if(stationaryEntity.worldX/mp.tileSize == newEntityX && stationaryEntity.worldY/mp.tileSize == newEntityY){
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found)
+                        mp.stationaryEntities.add(new Soil(mp,newEntityX, newEntityY));
+                }
+            }
         }
     }
 }

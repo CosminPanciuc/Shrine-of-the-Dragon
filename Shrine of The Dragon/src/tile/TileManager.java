@@ -17,7 +17,7 @@ public class TileManager {
 
     public TileManager(MainPanel mp){
         this.mp = mp;
-        tile = new Tile[10];
+        tile = new Tile[30];
         mapTileNumber = new int[mp.maxWorldCol][mp.maxWorldRow];
         getTileImage();
         loadMap();
@@ -51,18 +51,49 @@ public class TileManager {
         }
     }
     public void getTileImage(){
-        SpriteSheet spriteSheet = new SpriteSheet(mp, ImageLoader.LoadImage("/tiles/48x48.png"));
-        tile[0] = new Tile();
-        tile[0].texture = spriteSheet.crop(8,0);
-        tile[1] = new Tile();
-        tile[1].texture = spriteSheet.crop(8,1);
-        tile[2] = new Tile();
-        tile[2].texture = spriteSheet.crop(9,0);
-        tile[3] = new Tile();
-        tile[3].texture = spriteSheet.crop(11,0);
-        tile[3].collision = true;
-    }
+        initTile(0,8,1,false,true);
+        initTile(1,0,14,true,false);
+        initTile(2,1,14,true,false);
+        initTile(3,2,14,true,false);
+        //initTile(4,0,13,true,false);
+        //initTile(5,1,13,true,false);
+        //initTile(6,2,13,true,false);
+        //initTile(7,0,12,true,false);
+        //initTile(8,1,12,true,false);
+        //initTile(9,2,12,true,false);
+        /*
+        initTile(10,17,2,true,false);
+        initTile(11,18,2,true,false);
+        initTile(12,19,2,true,false);
+        initTile(13,17,1,true,false);
+        initTile(14,18,1,true,false);
+        initTile(15,19,1,true,false);
+        initTile(16,17,0,true,false);
+        initTile(17,18,0,true,false);
+        initTile(18,19,0,true,false);
+         */
+        //initTile(5, 5,0,true,false,"/tiles/house asset.png",32);
+        //initTile(6, 5,1,true,false,"/tiles/house asset.png",32);
+        //initTile(7, 5,2,true,false,"/tiles/house asset.png",32);
 
+        initTile(4,8,0,false,false);
+        initTile(5,9,0,false,false);
+        initTile(6,11,0,false,false);
+        initTile(7,12,0,false,false);
+    }
+    public void initTile(int index, int x, int y, boolean collision, boolean plantable){
+        tile[index] = new Tile();
+        tile[index].texture = mp.tileSheet.crop(x,y);
+        tile[index].collision = collision;
+        tile[index].plantable = plantable;
+    }
+    public void initTile(int index, int x, int y, boolean collision, boolean plantable, String path, int pix){
+        SpriteSheet sheet = new SpriteSheet(mp, ImageLoader.LoadImage(path));
+        tile[index] = new Tile();
+        tile[index].texture = sheet.crop(x,y,pix);
+        tile[index].collision = collision;
+        tile[index].plantable = plantable;
+    }
     public void draw(Graphics2D g2){
 
         int worldCol = 0;

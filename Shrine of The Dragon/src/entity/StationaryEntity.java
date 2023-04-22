@@ -9,10 +9,9 @@ import java.util.ArrayList;
 public class StationaryEntity extends Entity{
     public int hitPoints;
     public String size;
-    MainPanel mp;
     public ArrayList<BufferedImage> texture = new ArrayList<BufferedImage>();
-    int rowNumber;
-    int colNumber;
+    int rowNumber = 1;
+    int colNumber = 1;
 
     @Override
     public void draw(Graphics2D g2){

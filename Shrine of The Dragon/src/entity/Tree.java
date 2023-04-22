@@ -8,7 +8,6 @@ import java.awt.*;
 
 public class Tree extends StationaryEntity{
     public Tree(MainPanel mp, String type, int cordX, int cordY){
-        SpriteSheet spriteSheet = new SpriteSheet(mp, ImageLoader.LoadImage("/tiles/48x48.png"));
         size = type;
         switch(type) {
             case "Small" ->{
@@ -17,23 +16,23 @@ public class Tree extends StationaryEntity{
             }
             case "Big" ->{
                 hitBox = new Rectangle(48,110, 50,40);
-                texture.add(spriteSheet.crop(0,5));
-                texture.add(spriteSheet.crop(0,6));
-                texture.add(spriteSheet.crop(0,7));
-                texture.add(spriteSheet.crop(0,8));
+                texture.add(mp.tileSheet.crop(0,5));
+                texture.add(mp.tileSheet.crop(0,6));
+                texture.add(mp.tileSheet.crop(0,7));
+                texture.add(mp.tileSheet.crop(0,8));
 
-                texture.add(spriteSheet.crop(1,5));
-                texture.add(spriteSheet.crop(1,6));
-                texture.add(spriteSheet.crop(1,7));
-                texture.add(spriteSheet.crop(1,8));
+                texture.add(mp.tileSheet.crop(1,5));
+                texture.add(mp.tileSheet.crop(1,6));
+                texture.add(mp.tileSheet.crop(1,7));
+                texture.add(mp.tileSheet.crop(1,8));
 
-                texture.add(spriteSheet.crop(2,5));
-                texture.add(spriteSheet.crop(2,6));
-                texture.add(spriteSheet.crop(2,7));
-                texture.add(spriteSheet.crop(2,8));
+                texture.add(mp.tileSheet.crop(2,5));
+                texture.add(mp.tileSheet.crop(2,6));
+                texture.add(mp.tileSheet.crop(2,7));
+                texture.add(mp.tileSheet.crop(2,8));
 
 
-                rowNumber = 4;
+                rowNumber = 3;
                 colNumber = 4;
 
                 hitPoints = 5;

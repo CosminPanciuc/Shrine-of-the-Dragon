@@ -1,9 +1,8 @@
 package main;
 
-import entity.Player;
-import entity.Rock;
-import entity.StationaryEntity;
-import entity.Tree;
+import entity.*;
+import graphics.ImageLoader;
+import graphics.SpriteSheet;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -14,6 +13,7 @@ import java.util.Arrays;
 
 
 public class MainPanel extends JPanel implements Runnable{
+    public static MainPanel instace = new MainPanel();
     final int ogTileSize = 16; // 16px square tile
     final int scale = 3; // used for rescale of tile
     public final int tileSize = ogTileSize * scale; // upscale to 48px square tile
@@ -30,6 +30,8 @@ public class MainPanel extends JPanel implements Runnable{
 
 
     //FPS
+    public SpriteSheet tileSheet = new SpriteSheet(this, ImageLoader.LoadImage("/tiles/48x48.png"));
+    public SpriteSheet animalSheet = new SpriteSheet(this,ImageLoader.LoadImage("/animals/AnimalSheet.png"));
     int FPS = 60;
     KeyInput keyHandler = new KeyInput();
 
@@ -42,20 +44,21 @@ public class MainPanel extends JPanel implements Runnable{
     TileManager tileManager = new TileManager(this);
 
     public ArrayList<StationaryEntity> stationaryEntities = new ArrayList<StationaryEntity>();
+    public ArrayList<MovableEntity> movableEntities = new ArrayList<>();
 
-
-    public MainPanel(){
+    private MainPanel(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseInput);
         this.setFocusable(true);
-        stationaryEntities.add(new Rock(this,"Big",19,19));
-        stationaryEntities.add(new Tree(this, "Big",24,4));
-        stationaryEntities.add(new Rock(this,"Small",15,16));
+        initEntity();
     }
 
+    public static MainPanel getInstance(){
+        return instace;
+    }
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
@@ -86,6 +89,11 @@ public class MainPanel extends JPanel implements Runnable{
 
     public void update(){
         player.update();
+        /*
+        for(MovableEntity i:movableEntities){
+            i.update();
+        }
+         */
     }
 
     public void paintComponent(Graphics g){
@@ -100,8 +108,28 @@ public class MainPanel extends JPanel implements Runnable{
             i.draw(g2);
         }
 
+        for(MovableEntity i:movableEntities){
+            i.draw(g2);
+        }
+
         player.draw(g2);
 
         g2.dispose();
+    }
+
+    public void initEntity(){
+        stationaryEntities.add(new Rock(this, "Small", 14, 16));
+        stationaryEntities.add(new Rock(this, "Small", 11, 20));
+        stationaryEntities.add(new Rock(this, "Big", 19, 10));
+        stationaryEntities.add(new Rock(this, "Big", 25, 3));
+        stationaryEntities.add(new Tree(this, "Big", 4, 11));
+        stationaryEntities.add(new Tree(this, "Big", 5, 16));
+        stationaryEntities.add(new Tree(this, "Big", 27, 11));
+        stationaryEntities.add(new Tree(this, "Big", 25, 16));
+        stationaryEntities.add(new Tree(this, "Big", 22, 9));
+        stationaryEntities.add(new Tree(this, "Big", 10, 10));
+
+        movableEntities.add(new Bear(this,9,5));
+        movableEntities.add(new Bear(this,21,4));
     }
 }
