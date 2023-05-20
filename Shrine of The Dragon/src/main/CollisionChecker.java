@@ -109,47 +109,48 @@ public class CollisionChecker {
         }
 
         for(MovableEntity movableEntity: mp.movableEntities) {
+            if(movableEntity != entity){
+                int defaultEntityHBX = entity.hitBox.x;
+                int defaultEntityHBY = entity.hitBox.y;
+                int defaultObjX = movableEntity.hitBox.x;
+                int defaultObjY = movableEntity.hitBox.y;
 
-            int defaultEntityHBX = entity.hitBox.x;
-            int defaultEntityHBY = entity.hitBox.y;
-            int defaultObjX = movableEntity.hitBox.x;
-            int defaultObjY = movableEntity.hitBox.y;
+                entity.hitBox.x = entity.worldX + entity.hitBox.x;
+                entity.hitBox.y = entity.worldY + entity.hitBox.y;
+                movableEntity.hitBox.x = movableEntity.worldX + movableEntity.hitBox.x;
+                movableEntity.hitBox.y = movableEntity.worldY + movableEntity.hitBox.y;
 
-            entity.hitBox.x = entity.worldX + entity.hitBox.x;
-            entity.hitBox.y = entity.worldY + entity.hitBox.y;
-            movableEntity.hitBox.x = movableEntity.worldX + movableEntity.hitBox.x;
-            movableEntity.hitBox.y = movableEntity.worldY + movableEntity.hitBox.y;
-
-            switch (entity.direction) {
-                case "up" -> {
-                    entity.hitBox.y -= entity.speed;
-                    if (entity.hitBox.intersects(movableEntity.hitBox)) {
-                        entity.collision = true;
+                switch (entity.direction) {
+                    case "up" -> {
+                        entity.hitBox.y -= entity.speed;
+                        if (entity.hitBox.intersects(movableEntity.hitBox)) {
+                            entity.collision = true;
+                        }
+                    }
+                    case "down" -> {
+                        entity.hitBox.y += entity.speed;
+                        if (entity.hitBox.intersects(movableEntity.hitBox)) {
+                            entity.collision = true;
+                        }
+                    }
+                    case "right" -> {
+                        entity.hitBox.x += entity.speed;
+                        if (entity.hitBox.intersects(movableEntity.hitBox)) {
+                            entity.collision = true;
+                        }
+                    }
+                    case "left" -> {
+                        entity.hitBox.x -= entity.speed;
+                        if (entity.hitBox.intersects(movableEntity.hitBox)) {
+                            entity.collision = true;
+                        }
                     }
                 }
-                case "down" -> {
-                    entity.hitBox.y += entity.speed;
-                    if (entity.hitBox.intersects(movableEntity.hitBox)) {
-                        entity.collision = true;
-                    }
-                }
-                case "right" -> {
-                    entity.hitBox.x += entity.speed;
-                    if (entity.hitBox.intersects(movableEntity.hitBox)) {
-                        entity.collision = true;
-                    }
-                }
-                case "left" -> {
-                    entity.hitBox.x -= entity.speed;
-                    if (entity.hitBox.intersects(movableEntity.hitBox)) {
-                        entity.collision = true;
-                    }
-                }
+                entity.hitBox.x = defaultEntityHBX;
+                entity.hitBox.y = defaultEntityHBY;
+                movableEntity.hitBox.x = defaultObjX;
+                movableEntity.hitBox.y = defaultObjY;
             }
-            entity.hitBox.x = defaultEntityHBX;
-            entity.hitBox.y = defaultEntityHBY;
-            movableEntity.hitBox.x = defaultObjX;
-            movableEntity.hitBox.y = defaultObjY;
         }
     }
     public void checkPlayerInteraction(Player player, String selectedTool){

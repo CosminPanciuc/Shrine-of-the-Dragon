@@ -15,6 +15,24 @@ public class MouseInput implements MouseListener {
     public void mouseClicked(MouseEvent e) {
 
     }
+    public boolean isMouseClicked(int c){
+        if(c == 1){
+            var val = leftButtonPressed;
+            leftButtonPressed = false;
+            return val;
+        }
+        if(c == 2){
+            var val = middleButtonPressed;
+            middleButtonPressed = false;
+            return val;
+        }
+        if(c == 3){
+            var val = rightButtonPressed;
+            rightButtonPressed = false;
+            return val;
+        }
+        return false;
+    }
 
     @Override
     public void mousePressed(MouseEvent e) {

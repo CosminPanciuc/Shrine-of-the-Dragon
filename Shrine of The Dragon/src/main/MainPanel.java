@@ -32,6 +32,7 @@ public class MainPanel extends JPanel implements Runnable{
     //FPS
     public SpriteSheet tileSheet = new SpriteSheet(this, ImageLoader.LoadImage("/tiles/48x48.png"));
     public SpriteSheet animalSheet = new SpriteSheet(this,ImageLoader.LoadImage("/animals/AnimalSheet.png"));
+    public SpriteSheet hudSprite = new SpriteSheet(this, ImageLoader.LoadImage("/ui_elemets/hud_sprites.png"));
     int FPS = 60;
     KeyInput keyHandler = new KeyInput();
 
@@ -46,6 +47,7 @@ public class MainPanel extends JPanel implements Runnable{
     public ArrayList<StationaryEntity> stationaryEntities = new ArrayList<StationaryEntity>();
     public ArrayList<MovableEntity> movableEntities = new ArrayList<>();
 
+    public InGameUI inGameUI = new InGameUI(this);
     private MainPanel(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.black);
@@ -89,11 +91,9 @@ public class MainPanel extends JPanel implements Runnable{
 
     public void update(){
         player.update();
-        /*
         for(MovableEntity i:movableEntities){
             i.update();
         }
-         */
     }
 
     public void paintComponent(Graphics g){
@@ -113,6 +113,8 @@ public class MainPanel extends JPanel implements Runnable{
         }
 
         player.draw(g2);
+
+        inGameUI.draw(g2);
 
         g2.dispose();
     }

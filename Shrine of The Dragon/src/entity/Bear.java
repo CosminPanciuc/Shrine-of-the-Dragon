@@ -21,18 +21,7 @@ public class Bear extends MovableEntity{
     }
 
     public void randomMovement(){
-        Random random = new Random();
-        float randomNumber = random.nextFloat(1);
-        if( randomNumber < 0.5){
-            if(randomNumber < 0.25)
-                worldX += speed;
-            else worldX -=speed;
-        }
-        else {
-            if(randomNumber > 0.75)
-                worldY += speed;
-            else worldY -=speed;
-        }
+        worldX += speed;
     }
     @Override
     public void update(){
@@ -40,5 +29,7 @@ public class Bear extends MovableEntity{
         collision = false;
         mp.collisionChecker.checkTile(this);
         mp.collisionChecker.checkEntity(this);
+        if(collision)
+            worldX -= speed;
     }
 }

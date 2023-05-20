@@ -21,9 +21,11 @@ public class Player extends MovableEntity{
 
     public int axeQuality = 1;
     public int pickaxeQuality = 1;
+    boolean leftMouse = false;
 
     public ArrayList<BufferedImage> actionImage = new ArrayList<>();
 
+    public short hunger;
     public Player(MainPanel mp, KeyInput key, MouseInput mouse){
         this.mp = mp;
         this.key = key;
@@ -36,6 +38,7 @@ public class Player extends MovableEntity{
         actionArea.width = 30;
         actionArea.height = 30;
         healthPool = 100;
+        hunger = 100;
 
         setDefault();
         getPlayerImage();
@@ -140,7 +143,9 @@ public class Player extends MovableEntity{
     }
 
     public void mouseAction(){
-        if(mouse.leftButtonPressed ){
+        leftMouse = mouse.isMouseClicked(1);
+        if(leftMouse){
+
             getActionDirection();
             spriteCounter++;
 
@@ -157,10 +162,11 @@ public class Player extends MovableEntity{
 
             if(Objects.equals(selectedTool, "Sword"))
                 mp.collisionChecker.checkHit(this);
+
         }
-        if(mouse.middleButtonPressed)
+        if(mouse.isMouseClicked(2))
             System.out.println("Middle button = " + mouse.mouseX + " " + mouse.mouseY);
-        if(mouse.rightButtonPressed)
+        if(mouse.isMouseClicked(3))
             System.out.println("Rigth button = " + mouse.mouseX + " " + mouse.mouseY);
     }
 
@@ -182,7 +188,7 @@ public class Player extends MovableEntity{
     }
     public void draw(Graphics2D playerGraphics){
         BufferedImage image = null;
-        if(mouse.leftButtonPressed){
+        if(leftMouse){
             switch (selectedTool){
                 case "Pickaxe" ->{
                     switch (actionDirection){
@@ -263,8 +269,9 @@ public class Player extends MovableEntity{
                 }
             }
         }
-        if(mouse.leftButtonPressed)
+        if(leftMouse){
             playerGraphics.drawImage(image, screenX - 48, screenY - 48, null);
+        }
         else playerGraphics.drawImage(image, screenX, screenY, null);
     }
 }
