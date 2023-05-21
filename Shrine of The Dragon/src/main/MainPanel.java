@@ -42,10 +42,8 @@ public class MainPanel extends JPanel implements Runnable{
 
     public Player player = new Player(this,keyHandler, mouseInput);
 
-    TileManager tileManager = new TileManager(this);
 
-    public ArrayList<StationaryEntity> stationaryEntities = new ArrayList<StationaryEntity>();
-    public ArrayList<MovableEntity> movableEntities = new ArrayList<>();
+    public LevelManager levelManager = new LevelManager(this);
 
     public InGameUI inGameUI = new InGameUI(this);
     private MainPanel(){
@@ -91,7 +89,7 @@ public class MainPanel extends JPanel implements Runnable{
 
     public void update(){
         player.update();
-        for(MovableEntity i:movableEntities){
+        for(MovableEntity i:levelManager.levels.get(levelManager.currentLevelID).movableEntities){
             i.update();
         }
     }
@@ -101,14 +99,14 @@ public class MainPanel extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D)g;
 
-        tileManager.draw(g2);
+        levelManager.levels.get(levelManager.currentLevelID).tileManager.draw(g2);
 
 
-        for(StationaryEntity i: stationaryEntities){
+        for(StationaryEntity i: levelManager.levels.get(levelManager.currentLevelID).stationaryEntities){
             i.draw(g2);
         }
 
-        for(MovableEntity i:movableEntities){
+        for(MovableEntity i: levelManager.levels.get(levelManager.currentLevelID).movableEntities){
             i.draw(g2);
         }
 
@@ -120,18 +118,18 @@ public class MainPanel extends JPanel implements Runnable{
     }
 
     public void initEntity(){
-        stationaryEntities.add(new Rock(this, "Small", 14, 16));
-        stationaryEntities.add(new Rock(this, "Small", 11, 20));
-        stationaryEntities.add(new Rock(this, "Big", 19, 10));
-        stationaryEntities.add(new Rock(this, "Big", 25, 3));
-        stationaryEntities.add(new Tree(this, "Big", 4, 11));
-        stationaryEntities.add(new Tree(this, "Big", 5, 16));
-        stationaryEntities.add(new Tree(this, "Big", 27, 11));
-        stationaryEntities.add(new Tree(this, "Big", 25, 16));
-        stationaryEntities.add(new Tree(this, "Big", 22, 9));
-        stationaryEntities.add(new Tree(this, "Big", 10, 10));
+        levelManager.addStationaryEntity(new Rock(this, "Small", 14, 16), 0);
+        levelManager.addStationaryEntity(new Rock(this, "Small", 11, 20),0);
+        levelManager.addStationaryEntity(new Rock(this, "Big", 19, 10),0);
+        levelManager.addStationaryEntity(new Rock(this, "Big", 25, 3),0);
+        levelManager.addStationaryEntity(new Tree(this, "Big", 4, 11),0);
+        levelManager.addStationaryEntity(new Tree(this, "Big", 5, 16),0);
+        levelManager.addStationaryEntity(new Tree(this, "Big", 27, 11),0);
+        levelManager.addStationaryEntity(new Tree(this, "Big", 25, 16),0);
+        levelManager.addStationaryEntity(new Tree(this, "Big", 22, 9),0);
+        levelManager.addStationaryEntity(new Tree(this, "Big", 10, 10),0);
 
-        movableEntities.add(new Bear(this,9,5));
-        movableEntities.add(new Bear(this,21,4));
+        levelManager.addMovableEntity(new Bear(this,9,5),0);
+        levelManager.addMovableEntity(new Bear(this,21,4),0);
     }
 }

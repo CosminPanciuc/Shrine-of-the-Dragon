@@ -19,6 +19,8 @@ public class InGameUI {
     BufferedImage selected = ImageLoader.LoadImage("/ui_elemets/Inventory_select.png");
 
     SpriteSheet inventoryBar;
+
+    int selectedItem;
     public ArrayList<BufferedImage> inventory = new ArrayList<>();
 
     public InGameUI(MainPanel mp){
@@ -27,12 +29,16 @@ public class InGameUI {
             inventory.add(inventoryBar.crop(i,0));
         }
         this.mp = mp;
+
         fullHearth = mp.hudSprite.crop(0,0);
         halfHearth = mp.hudSprite.crop(1,0);
         emptyHearth = mp.hudSprite.crop(2,0);
         fullHunger = mp.hudSprite.crop(0,1);
         halfHunger = mp.hudSprite.crop(1,1);
         emptyHunger = mp.hudSprite.crop(2,1);
+
+
+        selectedItem = 1;
     }
 
     public void draw(Graphics2D g2){

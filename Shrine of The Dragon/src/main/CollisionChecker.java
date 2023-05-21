@@ -29,33 +29,33 @@ public class CollisionChecker {
         switch (entity.direction) {
             case "up" -> {
                 entityTopRow = (entityTopY - entity.speed) / mp.tileSize;
-                tileNumber1 = mp.tileManager.mapTileNumber[entityLeftCol][entityTopRow];
-                tileNumber2 = mp.tileManager.mapTileNumber[entityRightCol][entityTopRow];
-                if (mp.tileManager.tile[tileNumber1].collision || mp.tileManager.tile[tileNumber2].collision) {
+                tileNumber1 = mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[entityLeftCol][entityTopRow];
+                tileNumber2 = mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[entityRightCol][entityTopRow];
+                if (mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[tileNumber1].collision || mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[tileNumber2].collision) {
                     entity.collision = true;
                 }
             }
             case "down" -> {
                 entityBottomRow = (entityBottomY + entity.speed) / mp.tileSize;
-                tileNumber1 = mp.tileManager.mapTileNumber[entityLeftCol][entityBottomRow];
-                tileNumber2 = mp.tileManager.mapTileNumber[entityRightCol][entityBottomRow];
-                if (mp.tileManager.tile[tileNumber1].collision || mp.tileManager.tile[tileNumber2].collision) {
+                tileNumber1 = mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[entityLeftCol][entityBottomRow];
+                tileNumber2 = mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[entityRightCol][entityBottomRow];
+                if (mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[tileNumber1].collision || mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[tileNumber2].collision) {
                     entity.collision = true;
                 }
             }
             case "left" -> {
                 entityLeftCol = (entityLeftX - entity.speed) / mp.tileSize;
-                tileNumber1 = mp.tileManager.mapTileNumber[entityLeftCol][entityTopRow];
-                tileNumber2 = mp.tileManager.mapTileNumber[entityLeftCol][entityBottomRow];
-                if (mp.tileManager.tile[tileNumber1].collision || mp.tileManager.tile[tileNumber2].collision) {
+                tileNumber1 = mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[entityLeftCol][entityTopRow];
+                tileNumber2 = mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[entityLeftCol][entityBottomRow];
+                if (mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[tileNumber1].collision || mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[tileNumber2].collision) {
                     entity.collision = true;
                 }
             }
             case "right" -> {
                 entityRightCol = (entityRightX + entity.speed) / mp.tileSize;
-                tileNumber1 = mp.tileManager.mapTileNumber[entityRightCol][entityTopRow];
-                tileNumber2 = mp.tileManager.mapTileNumber[entityRightCol][entityBottomRow];
-                if (mp.tileManager.tile[tileNumber1].collision || mp.tileManager.tile[tileNumber2].collision) {
+                tileNumber1 = mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[entityRightCol][entityTopRow];
+                tileNumber2 = mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[entityRightCol][entityBottomRow];
+                if (mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[tileNumber1].collision || mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[tileNumber2].collision) {
                     entity.collision = true;
                 }
             }
@@ -64,7 +64,7 @@ public class CollisionChecker {
     }
 
     public void checkEntity(MovableEntity entity){
-        for(StationaryEntity stationaryEntity: mp.stationaryEntities) {
+        for(StationaryEntity stationaryEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities) {
 
             int defaultEntityHBX = entity.hitBox.x;
             int defaultEntityHBY = entity.hitBox.y;
@@ -108,7 +108,7 @@ public class CollisionChecker {
             stationaryEntity.hitBox.y = defaultObjY;
         }
 
-        for(MovableEntity movableEntity: mp.movableEntities) {
+        for(MovableEntity movableEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).movableEntities) {
             if(movableEntity != entity){
                 int defaultEntityHBX = entity.hitBox.x;
                 int defaultEntityHBY = entity.hitBox.y;
@@ -155,7 +155,7 @@ public class CollisionChecker {
     }
     public void checkPlayerInteraction(Player player, String selectedTool){
         ArrayList<StationaryEntity> temp = new ArrayList<>();
-        for(StationaryEntity stationaryEntity: mp.stationaryEntities) {
+        for(StationaryEntity stationaryEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities) {
 
             int currentWorldX = player.worldX;
             int currentWorldY = player.worldY;
@@ -214,13 +214,13 @@ public class CollisionChecker {
             player.hitBox.height = hitBoxHeight;
         }
         for(StationaryEntity stationaryEntity:temp){
-            mp.stationaryEntities.remove(stationaryEntity);
+            mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities.remove(stationaryEntity);
         }
     }
     public void checkHit(MovableEntity entity){
         ArrayList<MovableEntity> temp = new ArrayList<>();
 
-        for(MovableEntity movableEntity: mp.movableEntities){
+        for(MovableEntity movableEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).movableEntities){
 
             int currentWorldX = entity.worldX;
             int currentWorldY = entity.worldY;
@@ -267,7 +267,7 @@ public class CollisionChecker {
         }
 
         for(MovableEntity movableEntity: temp){
-            mp.movableEntities.remove(movableEntity);
+            mp.levelManager.levels.get(mp.levelManager.currentLevelID).movableEntities.remove(movableEntity);
         }
     }
 
@@ -276,64 +276,64 @@ public class CollisionChecker {
             case "Up" -> {
                 int newEntityX = (entity.worldX)/mp.tileSize;
                 int newEntityY = (entity.worldY - 48)/mp.tileSize;
-                if(mp.tileManager.tile[mp.tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
+                if(mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
                     boolean found = false;
-                    for(StationaryEntity stationaryEntity: mp.stationaryEntities){
+                    for(StationaryEntity stationaryEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities){
                         if(stationaryEntity.worldX/mp.tileSize == newEntityX && stationaryEntity.worldY/mp.tileSize == newEntityY){
                             found = true;
                             break;
                         }
                     }
                     if(!found)
-                        mp.stationaryEntities.add(new Soil(mp,newEntityX,newEntityY));
+                        mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities.add(new Soil(mp,newEntityX,newEntityY));
                 }
             }
 
             case "Down" -> {
                 int newEntityX = (entity.worldX)/mp.tileSize;
                 int newEntityY = (entity.worldY + 48)/mp.tileSize;
-                if(mp.tileManager.tile[mp.tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
+                if(mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
                     boolean found = false;
-                    for(StationaryEntity stationaryEntity: mp.stationaryEntities){
+                    for(StationaryEntity stationaryEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities){
                         if(stationaryEntity.worldX/mp.tileSize == newEntityX && stationaryEntity.worldY/mp.tileSize == newEntityY){
                             found = true;
                             break;
                         }
                     }
                     if(!found)
-                        mp.stationaryEntities.add(new Soil(mp,newEntityX, newEntityY));
+                        mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities.add(new Soil(mp,newEntityX, newEntityY));
                 }
             }
 
             case "Right" -> {
                 int newEntityX = (entity.worldX + 48)/mp.tileSize;
                 int newEntityY = (entity.worldY)/mp.tileSize;
-                if(mp.tileManager.tile[mp.tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
+                if(mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
                     boolean found = false;
-                    for(StationaryEntity stationaryEntity: mp.stationaryEntities){
+                    for(StationaryEntity stationaryEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities){
                         if(stationaryEntity.worldX/mp.tileSize  == newEntityX && stationaryEntity.worldY/mp.tileSize == newEntityY){
                             found = true;
                             break;
                         }
                     }
                     if(!found)
-                        mp.stationaryEntities.add(new Soil(mp,newEntityX, newEntityY));
+                        mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities.add(new Soil(mp,newEntityX, newEntityY));
                 }
             }
 
             case "Left" -> {
                 int newEntityX = (entity.worldX - 48)/mp.tileSize;
                 int newEntityY = (entity.worldY)/mp.tileSize;
-                if(mp.tileManager.tile[mp.tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
+                if(mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.tile[mp.levelManager.levels.get(mp.levelManager.currentLevelID).tileManager.mapTileNumber[newEntityX][newEntityY]].plantable){
                     boolean found = false;
-                    for(StationaryEntity stationaryEntity: mp.stationaryEntities){
+                    for(StationaryEntity stationaryEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities){
                         if(stationaryEntity.worldX/mp.tileSize == newEntityX && stationaryEntity.worldY/mp.tileSize == newEntityY){
                             found = true;
                             break;
                         }
                     }
                     if(!found)
-                        mp.stationaryEntities.add(new Soil(mp,newEntityX, newEntityY));
+                        mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities.add(new Soil(mp,newEntityX, newEntityY));
                 }
             }
         }
