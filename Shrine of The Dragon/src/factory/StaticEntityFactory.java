@@ -1,9 +1,6 @@
 package factory;
 
-import entity.Rock;
-import entity.Soil;
-import entity.StationaryEntity;
-import entity.Tree;
+import entity.*;
 import main.MainPanel;
 
 public class StaticEntityFactory{
@@ -16,6 +13,7 @@ public class StaticEntityFactory{
             case "Rock" -> {return new Rock(mp, size, coordX, coordY, hp);}
             case "Tree" -> {return new Tree(mp, size, coordX, coordY, hp);}
             case "Soil" -> {return new Soil(mp, coordX, coordY);}
+            case "Ambient" -> {return new Ambient(mp, size, coordX, coordY, hp);}
         }
         throw new IllegalArgumentException("Bad argument");
     }

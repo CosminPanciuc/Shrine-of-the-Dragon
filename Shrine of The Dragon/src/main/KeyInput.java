@@ -4,10 +4,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener {
-
-    public boolean wPressed, sPressed, aPressed, dPressed;
+    MainPanel mp;
+    public boolean wPressed, sPressed, aPressed, dPressed, escPressed;
     public short numberPressed = 10;
 
+    public KeyInput(MainPanel mp){
+        this.mp = mp;
+    }
     @Override
     public void keyTyped(KeyEvent e) {
     }
@@ -20,6 +23,17 @@ public class KeyInput implements KeyListener {
         if(code == KeyEvent.VK_A){aPressed = true;}
         if(code == KeyEvent.VK_S){sPressed = true;}
         if(code == KeyEvent.VK_D){dPressed = true;}
+        if(code == KeyEvent.VK_ESCAPE){
+            escPressed = true;
+            if(mp.keyHandler.escPressed){
+                if(mp.currentState == MainPanel.GameState.INGAMEMENU){
+                    mp.currentState = MainPanel.GameState.PLAY;
+                }
+                if(mp.currentState == MainPanel.GameState.PLAY) {
+                    mp.currentState = MainPanel.GameState.INGAMEMENU;
+                }
+            }
+        }
         switch (code){
             case KeyEvent.VK_1 -> numberPressed = 1;
             case KeyEvent.VK_2 -> numberPressed = 2;
@@ -50,5 +64,6 @@ public class KeyInput implements KeyListener {
         if(code == KeyEvent.VK_D){
             dPressed = false;
         }
+        if(code == KeyEvent.VK_ESCAPE){escPressed = false;}
     }
 }

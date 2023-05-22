@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class TileManager {
     MainPanel mp;
@@ -27,20 +28,17 @@ public class TileManager {
     }
 
     public void loadMap(){
+        Scanner scanner;
         try{
             InputStream is = getClass().getResourceAsStream("/maps/map.txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            scanner = new Scanner(is);
 
             int col = 0;
             int row = 0;
             while(col < maxWorldCol && row < maxWorldRow){
-                String line = br.readLine();
                 while(col < maxWorldCol){
-                    String[] numbers = line.split(" ");
-
-                    int num = Integer.parseInt(numbers[col]);
-
-                    mapTileNumber[col][row] = num;
+                    int val = scanner.nextInt();
+                    mapTileNumber[col][row] = val;
                     ++col;
                 }
                 if(col == maxWorldCol){
@@ -48,7 +46,7 @@ public class TileManager {
                     ++row;
                 }
             }
-            br.close();
+            scanner.close();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -63,9 +61,10 @@ public class TileManager {
         //initTile(6,2,13,true,false);
         //initTile(7,0,12,true,false);
         //initTile(8,1,12,true,false);
-        //initTile(9,2,12,true,false);
+        initTile(9,2,12,true,false);
+        //initTile(10,17,2,true,false);
         /*
-        initTile(10,17,2,true,false);
+
         initTile(11,18,2,true,false);
         initTile(12,19,2,true,false);
         initTile(13,17,1,true,false);

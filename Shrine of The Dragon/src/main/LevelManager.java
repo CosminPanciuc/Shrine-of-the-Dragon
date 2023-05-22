@@ -19,7 +19,7 @@ public class LevelManager {
         //levels.get(0).maxWorldRow = 25;
     }
 
-    public void addLevel(){git 
+    public void addLevel(){
         Level temp = new Level(mp);
         levels.add(temp);
     }

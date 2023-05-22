@@ -35,9 +35,9 @@ public class MainPanel extends JPanel implements Runnable{
     public SpriteSheet animalSheet = new SpriteSheet(this,ImageLoader.LoadImage("/animals/AnimalSheet.png"));
     public SpriteSheet hudSprite = new SpriteSheet(this, ImageLoader.LoadImage("/ui_elemets/hud_sprites.png"));
     int FPS = 60;
-    KeyInput keyHandler = new KeyInput();
+    KeyInput keyHandler = new KeyInput(this);
 
-    MouseInput mouseInput = new MouseInput();
+    MouseInput mouseInput = new MouseInput(this);
     Thread gameThread;
     public StaticEntityFactory staticEntityFactory = new StaticEntityFactory(this);
     public MovableEntityFactory movableEntityFactory = new MovableEntityFactory(this);
@@ -49,6 +49,12 @@ public class MainPanel extends JPanel implements Runnable{
     public DatabaseLoader defaultDatabase = new DatabaseLoader(this,"default");
     public DatabaseLoader savesDatabase = new DatabaseLoader(this,"saves");
     public InGameUI inGameUI = new InGameUI(this);
+    public Menu menu = new Menu(this);
+
+    public enum GameState{
+        MENU, PLAY, INGAMEMENU
+    }
+    public GameState currentState = GameState.MENU;
     private MainPanel(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.black);
@@ -62,17 +68,17 @@ public class MainPanel extends JPanel implements Runnable{
         return instace;
     }
     public void loadFromDefaultDB(){
-        defaultDatabase.LoadFromDatabase();
-        defaultDatabase.closeDB();
+        //defaultDatabase.LoadFromDatabase();
+        //defaultDatabase.closeDB();
     }
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
-        loadFromDefaultDB();
-        savesDatabase.SaveToDatabase();
-        savesDatabase.LoadFromDatabase();
-        System.out.println(levelManager.currentLevelID);
-        savesDatabase.closeDB();
+        //loadFromDefaultDB();
+        //savesDatabase.SaveToDatabase();
+        //savesDatabase.LoadFromDatabase();
+        //System.out.println(levelManager.currentLevelID);
+        //savesDatabase.closeDB();
     }
 
     @Override
@@ -83,17 +89,24 @@ public class MainPanel extends JPanel implements Runnable{
         long currentTime;
 
         while (gameThread != null){
+            if(currentState == GameState.PLAY){
+                currentTime = System.nanoTime();
+                delta += (currentTime - lastTime) / drawInterval;
 
-            currentTime = System.nanoTime();
-            delta += (currentTime - lastTime) / drawInterval;
+                lastTime = currentTime;
+                if(delta >= 1){
+                    update();
 
-            lastTime = currentTime;
-            if(delta >= 1){
-                update();
+                    repaint();
 
+                    --delta;
+                }
+            } else if(currentState == GameState.MENU){
+                menu.update();
                 repaint();
-
-                --delta;
+            } else if(currentState == GameState.INGAMEMENU){
+                menu.InGameMenuUpdate();
+                repaint();
             }
         }
     }
@@ -105,27 +118,32 @@ public class MainPanel extends JPanel implements Runnable{
         }
     }
 
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
+    public void paintComponent(Graphics g) {
 
-        Graphics2D g2 = (Graphics2D)g;
+            super.paintComponent(g);
 
-        levelManager.levels.get(levelManager.currentLevelID).tileManager.draw(g2);
+            Graphics2D g2 = (Graphics2D) g;
+            if (currentState == GameState.PLAY){
+            levelManager.levels.get(levelManager.currentLevelID).tileManager.draw(g2);
 
 
-        for(StationaryEntity i: levelManager.levels.get(levelManager.currentLevelID).stationaryEntities){
-            i.draw(g2);
-        }
+            for (StationaryEntity i : levelManager.levels.get(levelManager.currentLevelID).stationaryEntities) {
+                i.draw(g2);
+            }
 
-        for(MovableEntity i: levelManager.levels.get(levelManager.currentLevelID).movableEntities){
-            i.draw(g2);
-        }
+            for (MovableEntity i : levelManager.levels.get(levelManager.currentLevelID).movableEntities) {
+                i.draw(g2);
+            }
 
-        player.draw(g2);
+            player.draw(g2);
 
-        inGameUI.draw(g2);
+            inGameUI.draw(g2);
 
-        g2.dispose();
+            g2.dispose();
+        } else if(currentState == GameState.MENU){
+            menu.draw(g2);
+        } else if(currentState == GameState.INGAMEMENU){
+                menu.drawInGameMenu(g2);
+            }
     }
-
 }

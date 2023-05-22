@@ -4,12 +4,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class MouseInput implements MouseListener {
-
+    MainPanel mp;
     public int mouseX;
     public int mouseY;
     public boolean middleButtonPressed = false;
     public boolean rightButtonPressed = false;
     public boolean leftButtonPressed = false;
+
+    public MouseInput(MainPanel mp){
+        this.mp = mp;
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {

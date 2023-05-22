@@ -187,7 +187,7 @@ public class CollisionChecker {
                         if(stationaryEntity.getClass() == Tree.class){
                             if(Objects.equals(stationaryEntity.size, "Big") && player.axeQuality > 1)
                                 stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.axeQuality - 1;
-                            else if(Objects.equals(stationaryEntity.size, "Small"))
+                            else if(Objects.equals(stationaryEntity.size, "Small") || Objects.equals(stationaryEntity.size, "Fallen"))
                                 stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.axeQuality;
                         }
                     }

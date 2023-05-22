@@ -37,6 +37,17 @@ public class Tree extends StationaryEntity{
 
                 hitPoints = hp;
             }
+            case "Fallen" ->{
+                hitBox = new Rectangle(0,0,96,35);
+
+                texture.add(mp.tileSheet.crop(8,2));
+                texture.add(mp.tileSheet.crop(9,2));
+
+                rowNumber = 2;
+                colNumber = 1;
+
+                hitPoints = hp;
+            }
         }
         this.mp = mp;
         worldX = cordX * mp.tileSize;

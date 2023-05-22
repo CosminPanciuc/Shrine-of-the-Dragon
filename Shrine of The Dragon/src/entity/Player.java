@@ -79,8 +79,34 @@ public class Player extends MovableEntity{
         playerMovement();
         mouseAction();
         setSelectedTool();
+        playerPosition();
     }
 
+    public void playerPosition(){
+        switch (mp.levelManager.currentLevelID){
+            case 0 ->{
+                if(worldX > 25 * mp.tileSize && worldX < 27 * mp.tileSize){
+                    if(worldY > 0 && worldY < mp.tileSize/2){
+                        mp.levelManager.currentLevelID = 1;
+                        worldX = 48;
+                        worldY = 48;
+                    }
+                }
+            }
+            case 1 ->{
+                worldX = 100;
+                worldY = 100;
+            }
+            case 2 ->{
+                worldX = 120;
+                worldY = 120;
+            }
+            case 4 ->{
+                worldX = 140;
+                worldY = 140;
+            }
+        }
+    }
     public void setSelectedTool(){
         switch (key.numberPressed){
             case 1 -> {
