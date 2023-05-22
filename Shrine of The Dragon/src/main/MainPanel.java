@@ -1,6 +1,8 @@
 package main;
 
 import entity.*;
+import factory.MovableEntityFactory;
+import factory.StaticEntityFactory;
 import graphics.ImageLoader;
 import graphics.SpriteSheet;
 import tile.TileManager;
@@ -23,11 +25,10 @@ public class MainPanel extends JPanel implements Runnable{
     final public int screenHeight = tileSize * screenTileRowCount;
 
     //WORLD
-    public final int maxWorldCol = 32;
-    public final int maxWorldRow = 25;
-    public final int worldWidth = tileSize * maxWorldCol;
-    public final int worldHeight = tileSize * maxWorldRow;
-
+    //public final int maxWorldCol = 32;
+    //public final int maxWorldRow = 25;
+    //public final int worldWidth = tileSize * maxWorldCol;
+    //public final int worldHeight = tileSize * maxWorldRow;
 
     //FPS
     public SpriteSheet tileSheet = new SpriteSheet(this, ImageLoader.LoadImage("/tiles/48x48.png"));
@@ -38,13 +39,15 @@ public class MainPanel extends JPanel implements Runnable{
 
     MouseInput mouseInput = new MouseInput();
     Thread gameThread;
+    public StaticEntityFactory staticEntityFactory = new StaticEntityFactory(this);
+    public MovableEntityFactory movableEntityFactory = new MovableEntityFactory(this);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
 
     public Player player = new Player(this,keyHandler, mouseInput);
 
-
     public LevelManager levelManager = new LevelManager(this);
-
+    public DatabaseLoader defaultDatabase = new DatabaseLoader(this,"default");
+    public DatabaseLoader savesDatabase = new DatabaseLoader(this,"saves");
     public InGameUI inGameUI = new InGameUI(this);
     private MainPanel(){
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
@@ -53,15 +56,23 @@ public class MainPanel extends JPanel implements Runnable{
         this.addKeyListener(keyHandler);
         this.addMouseListener(mouseInput);
         this.setFocusable(true);
-        initEntity();
     }
 
     public static MainPanel getInstance(){
         return instace;
     }
+    public void loadFromDefaultDB(){
+        defaultDatabase.LoadFromDatabase();
+        defaultDatabase.closeDB();
+    }
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
+        loadFromDefaultDB();
+        savesDatabase.SaveToDatabase();
+        savesDatabase.LoadFromDatabase();
+        System.out.println(levelManager.currentLevelID);
+        savesDatabase.closeDB();
     }
 
     @Override
@@ -117,19 +128,4 @@ public class MainPanel extends JPanel implements Runnable{
         g2.dispose();
     }
 
-    public void initEntity(){
-        levelManager.addStationaryEntity(new Rock(this, "Small", 14, 16), 0);
-        levelManager.addStationaryEntity(new Rock(this, "Small", 11, 20),0);
-        levelManager.addStationaryEntity(new Rock(this, "Big", 19, 10),0);
-        levelManager.addStationaryEntity(new Rock(this, "Big", 25, 3),0);
-        levelManager.addStationaryEntity(new Tree(this, "Big", 4, 11),0);
-        levelManager.addStationaryEntity(new Tree(this, "Big", 5, 16),0);
-        levelManager.addStationaryEntity(new Tree(this, "Big", 27, 11),0);
-        levelManager.addStationaryEntity(new Tree(this, "Big", 25, 16),0);
-        levelManager.addStationaryEntity(new Tree(this, "Big", 22, 9),0);
-        levelManager.addStationaryEntity(new Tree(this, "Big", 10, 10),0);
-
-        levelManager.addMovableEntity(new Bear(this,9,5),0);
-        levelManager.addMovableEntity(new Bear(this,21,4),0);
-    }
 }

@@ -6,8 +6,8 @@ import java.awt.*;
 import java.util.Random;
 
 public class Bear extends MovableEntity{
-    public Bear(MainPanel mp, int cordX, int cordY){
-        speed = 3;
+    public Bear(MainPanel mp, int cordX, int cordY, int hp, int speed, int damage){
+        this.speed = speed;
         this.mp = mp;
         hitBox = new Rectangle(0,0,48,48);
         up1 = mp.animalSheet.crop(0,19,16);
@@ -17,7 +17,8 @@ public class Bear extends MovableEntity{
         worldX = cordX * mp.tileSize;
         worldY = cordY * mp.tileSize;
         direction = "up";
-        healthPool = 20;
+        healthPool = hp;
+        this.damage = damage;
     }
 
     public void randomMovement(){

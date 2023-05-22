@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class Rock extends StationaryEntity{
 
-    public Rock(MainPanel mp, String type, int cordX, int cordY){
+    public Rock(MainPanel mp, String type, int cordX, int cordY, int hp){
         size = type;
         switch (type){
             case "Small" -> {
@@ -31,7 +31,7 @@ public class Rock extends StationaryEntity{
 
                 rowNumber = 2;
                 colNumber = 2;
-                hitPoints = 5;
+                hitPoints = hp;
             }
         }
         this.mp = mp;

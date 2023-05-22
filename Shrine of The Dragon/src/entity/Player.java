@@ -25,7 +25,7 @@ public class Player extends MovableEntity{
 
     public ArrayList<BufferedImage> actionImage = new ArrayList<>();
 
-    public short hunger;
+    public int hunger;
     public Player(MainPanel mp, KeyInput key, MouseInput mouse){
         this.mp = mp;
         this.key = key;
@@ -42,6 +42,14 @@ public class Player extends MovableEntity{
 
         setDefault();
         getPlayerImage();
+    }
+    public void setPlayerStats(int coordX, int coordY, int hp, int hunger, int actionWidth, int actionHeight){
+        worldX = coordX * mp.tileSize;
+        worldY = coordY * mp.tileSize;
+        healthPool = hp;
+        this.hunger = hunger;
+        actionArea.width = actionWidth;
+        actionArea.height = actionHeight;
     }
 
     public void setDefault(){

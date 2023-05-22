@@ -2,6 +2,8 @@
 <module version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_19" inherit-compiler-output="true">
     <exclude-output />
+    <content url="jar://$USER_HOME$/Desktop/Java/sqlite-jdbc-3.7.2.jar!/" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="sqlite-jdbc-3.7.2" level="project" />
   </component>
 </module>

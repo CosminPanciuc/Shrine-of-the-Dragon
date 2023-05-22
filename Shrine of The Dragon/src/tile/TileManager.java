@@ -15,10 +15,13 @@ public class TileManager {
     public Tile[] tile;
     public int[][] mapTileNumber;
 
+    public int maxWorldCol = 32;
+    public int maxWorldRow = 25;
+
     public TileManager(MainPanel mp){
         this.mp = mp;
         tile = new Tile[30];
-        mapTileNumber = new int[mp.maxWorldCol][mp.maxWorldRow];
+        mapTileNumber = new int[maxWorldCol][maxWorldRow];
         getTileImage();
         loadMap();
     }
@@ -30,9 +33,9 @@ public class TileManager {
 
             int col = 0;
             int row = 0;
-            while(col < mp.maxWorldCol && row < mp.maxWorldRow){
+            while(col < maxWorldCol && row < maxWorldRow){
                 String line = br.readLine();
-                while(col < mp.maxWorldCol){
+                while(col < maxWorldCol){
                     String[] numbers = line.split(" ");
 
                     int num = Integer.parseInt(numbers[col]);
@@ -40,7 +43,7 @@ public class TileManager {
                     mapTileNumber[col][row] = num;
                     ++col;
                 }
-                if(col == mp.maxWorldCol){
+                if(col == maxWorldCol){
                     col = 0;
                     ++row;
                 }
@@ -99,7 +102,7 @@ public class TileManager {
         int worldCol = 0;
         int worldRow = 0;
 
-        while(worldCol < mp.maxWorldCol && worldRow < mp.maxWorldRow){
+        while(worldCol < maxWorldCol && worldRow < maxWorldRow){
             int tileNum = mapTileNumber[worldCol][worldRow];
 
             int worldX = worldCol * mp.tileSize;
@@ -116,7 +119,7 @@ public class TileManager {
             }
             ++worldCol;
 
-            if(worldCol == mp.maxWorldCol){
+            if(worldCol == maxWorldCol){
                 worldCol = 0;
                 ++worldRow;
 

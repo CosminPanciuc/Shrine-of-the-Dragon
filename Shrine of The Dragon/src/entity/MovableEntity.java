@@ -15,8 +15,8 @@ public class MovableEntity extends Entity{
     public String actionDirection = "";
     public int spriteCounter = 0;
     public int spriteNumber = 1;
-    public short healthPool;
-    public short damage;
+    public int healthPool;
+    public int damage;
     @Override
     public void draw(Graphics2D g2){
         int screenX = worldX - mp.player.worldX + mp.player.screenX;

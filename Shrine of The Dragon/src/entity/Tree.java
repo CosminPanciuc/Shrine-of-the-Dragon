@@ -7,7 +7,7 @@ import main.MainPanel;
 import java.awt.*;
 
 public class Tree extends StationaryEntity{
-    public Tree(MainPanel mp, String type, int cordX, int cordY){
+    public Tree(MainPanel mp, String type, int cordX, int cordY, int hp){
         size = type;
         switch(type) {
             case "Small" ->{
@@ -35,7 +35,7 @@ public class Tree extends StationaryEntity{
                 rowNumber = 3;
                 colNumber = 4;
 
-                hitPoints = 5;
+                hitPoints = hp;
             }
         }
         this.mp = mp;
