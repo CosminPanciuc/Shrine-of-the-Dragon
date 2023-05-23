@@ -77,12 +77,12 @@ public class Ambient extends StationaryEntity{
                 colNumber = 1;
             }
             case "Tallgrass"->{
-                hitBox = new Rectangle(9,9,30,30);
+                hitBox = new Rectangle(48,48,30,30);
                 hitPoints = hp;
                 texture.add(mp.tileSheet.crop(10, 1));
                 texture.add(mp.tileSheet.crop(10, 2));
-                rowNumber = 2;
-                colNumber = 1;
+                rowNumber = 1;
+                colNumber = 2;
             }
         }
     }

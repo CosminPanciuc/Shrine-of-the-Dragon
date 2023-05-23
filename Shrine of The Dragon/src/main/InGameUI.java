@@ -22,10 +22,15 @@ public class InGameUI {
     BufferedImage selected = ImageLoader.LoadImage("/ui_elemets/Inventory_select.png");
 
     BufferedImage inventory;
+    ArrayList<BufferedImage> items = new ArrayList<BufferedImage>();
     int selectedItem;
 
     public InGameUI(MainPanel mp){
         inventory = ImageLoader.LoadImage("/ui_elemets/inventory.png");
+        SpriteSheet itemSheet = new SpriteSheet(mp,ImageLoader.LoadImage("/ui_elemets/Basic tools and meterials.png"));
+        items.add(itemSheet.crop(1,0,16));
+        items.add(itemSheet.crop(2,0,16));
+
         this.mp = mp;
 
         fullHearth = mp.hudSprite.crop(0,0);
@@ -168,5 +173,7 @@ public class InGameUI {
         for(int i = 0; i < 10; ++i){
             g2.drawImage(inventory, drawPositionX + (i * 48), drawPositionY, mp.tileSize, mp.tileSize, null);
         }
+        g2.drawImage(items.get(0), drawPositionX, drawPositionY, mp.tileSize, mp.tileSize, null);
+        g2.drawImage(items.get(1), drawPositionX + 48, drawPositionY, mp.tileSize, mp.tileSize, null);
     }
 }

@@ -13,6 +13,7 @@ public class CollisionChecker {
         this.mp = mp;
     }
 
+    //verifica coliziunea cu tileurile
     public void checkTile(MovableEntity entity){
         int entityLeftX = entity.worldX + entity.hitBox.x;
         int entityRightX = entity.worldX + entity.hitBox.x + entity.hitBox.width;
@@ -62,7 +63,7 @@ public class CollisionChecker {
 
         }
     }
-
+    //verifica coliziunea entitatilor
     public void checkEntity(MovableEntity entity){
         for(StationaryEntity stationaryEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities) {
 
@@ -159,6 +160,7 @@ public class CollisionChecker {
         int defaultEntityHBY = entity.hitBox.y;
         int defaultObjX = mp.player.hitBox.x;
         int defaultObjY = mp.player.hitBox.y;
+        boolean player = false;
 
         entity.hitBox.x = entity.worldX + entity.hitBox.x;
         entity.hitBox.y = entity.worldY + entity.hitBox.y;
@@ -170,28 +172,32 @@ public class CollisionChecker {
                 entity.hitBox.y -= entity.speed;
                 if (entity.hitBox.intersects(mp.player.hitBox)) {
                     entity.collision = true;
+                    player = true;
                 }
             }
             case "down" -> {
                 entity.hitBox.y += entity.speed;
                 if (entity.hitBox.intersects(mp.player.hitBox)) {
                     entity.collision = true;
+                    player = true;
                 }
             }
             case "right" -> {
                 entity.hitBox.x += entity.speed;
                 if (entity.hitBox.intersects(mp.player.hitBox)) {
                     entity.collision = true;
+                    player = true;
                 }
             }
             case "left" -> {
                 entity.hitBox.x -= entity.speed;
                 if (entity.hitBox.intersects(mp.player.hitBox)) {
                     entity.collision = true;
+                    player = true;
                 }
             }
         }
-        if(entity.collision && entity.attackCooldown == 0){
+        if(entity.collision && entity.attackCooldown == 0 && player){
             mp.player.healthPool -= entity.damage;
             entity.attackCooldown = 30;
         }
@@ -200,6 +206,7 @@ public class CollisionChecker {
         mp.player.hitBox.x = defaultObjX;
         mp.player.hitBox.y = defaultObjY;
     }
+    //verifica interactiunea playerului cu obiectele statice
     public void checkPlayerInteraction(Player player, String selectedTool){
         ArrayList<StationaryEntity> temp = new ArrayList<>();
         for(StationaryEntity stationaryEntity: mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities) {
@@ -232,9 +239,9 @@ public class CollisionChecker {
                 switch (selectedTool){
                     case "Axe" ->{
                         if(stationaryEntity.getClass() == Tree.class){
-                            if(Objects.equals(stationaryEntity.size, "Big") && player.axeQuality > 1)
+                            if(((Objects.equals(stationaryEntity.size, "Big" )  || Objects.equals(stationaryEntity.size, "Fallen" )) && player.axeQuality > 1))
                                 stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.axeQuality - 1;
-                            else if(Objects.equals(stationaryEntity.size, "Small") || Objects.equals(stationaryEntity.size, "Fallen"))
+                            else if(Objects.equals(stationaryEntity.size, "Small"))
                                 stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.axeQuality;
                         }
                     }
@@ -242,8 +249,22 @@ public class CollisionChecker {
                         if(stationaryEntity.getClass() == Rock.class)
                             if(Objects.equals(stationaryEntity.size, "Big") && player.pickaxeQuality > 1)
                                 stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.pickaxeQuality - 1;
+                        if(Objects.equals(stationaryEntity.size, "BigMossy") && player.pickaxeQuality > 1)
+                            stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.pickaxeQuality - 1;
                             else if(Objects.equals(stationaryEntity.size, "Small"))
                                 stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.pickaxeQuality;
+                    }
+                    case "NPC"->{
+                        if(stationaryEntity.getClass() == NPC.class){
+                            if(Objects.equals(mp.player.selectedTool, "Axe") && mp.player.gold > 100){
+                                mp.player.axeQuality = 2;
+                                mp.player.gold -= 100;
+                            }
+                            if(Objects.equals(mp.player.selectedTool, "Pickaxe") && mp.player.gold > 100){
+                                mp.player.pickaxeQuality = 2;
+                                mp.player.gold -= 100;
+                            }
+                        }
                     }
                     case "quest"->{
                         if(stationaryEntity.getClass() == Dragon.class){

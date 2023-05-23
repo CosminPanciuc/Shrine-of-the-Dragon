@@ -17,7 +17,7 @@ public class Player extends MovableEntity{
     MouseInput mouse;
     public final int screenX;
     public final int screenY;
-    String selectedTool = "Pickaxe";
+    public String selectedTool = "Pickaxe";
 
     public int axeQuality = 1;
     public int pickaxeQuality = 1;
@@ -104,6 +104,7 @@ public class Player extends MovableEntity{
             hungerCount++;
         }
     }
+    // verifica daca playerul trece in alta mapa
     public void playerPosition(){
         switch (mp.levelManager.currentLevelID){
             case 0 ->{
@@ -152,6 +153,7 @@ public class Player extends MovableEntity{
             }
         }
     }
+    //seleceaza unealta
     public void setSelectedTool(){
         switch (key.numberPressed){
             case 1 -> {
@@ -237,6 +239,7 @@ public class Player extends MovableEntity{
 
             mp.collisionChecker.checkPlayerInteraction(this, this.selectedTool);
             mp.collisionChecker.checkPlayerInteraction(this,"quest");
+            mp.collisionChecker.checkPlayerInteraction(this,"NPC");
             if(Objects.equals(selectedTool, "Hoe"))
                 mp.collisionChecker.checkTileHit(this);
 

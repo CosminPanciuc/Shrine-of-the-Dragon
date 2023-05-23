@@ -62,6 +62,7 @@ public class DatabaseLoader {
             throw new RuntimeException(e);
         }
     }
+    //incarca din database
     public void LoadFromDatabase(){
         try{
             for(Level i: mp.levelManager.levels){
@@ -109,6 +110,7 @@ public class DatabaseLoader {
             throw new RuntimeException(e);
         }
     }
+    //salveaza in database
     public void SaveToDatabase(){
         Statement stmt = null;
         try {
