@@ -33,6 +33,57 @@ public class Ambient extends StationaryEntity{
                 rowNumber = 3;
                 colNumber = 4;
             }
+            case "Campfire"->{
+                hitBox = new Rectangle(9,9,30,30);
+                hitPoints = hp;
+                texture.add(mp.tileSheet.crop(11, 5));
+                rowNumber = 1;
+                colNumber = 1;
+            }
+            case "Bush"->{
+                hitBox = new Rectangle(9,9,30,30);
+                hitPoints = hp;
+                texture.add(mp.tileSheet.crop(9, 1));
+                rowNumber = 1;
+                colNumber = 1;
+            }
+            case "Sunflower"->{
+                hitBox = new Rectangle(9,9,30,30);
+                hitPoints = hp;
+                texture.add(mp.tileSheet.crop(13, 0));
+                texture.add(mp.tileSheet.crop(13, 1));
+                rowNumber = 2;
+                colNumber = 1;
+            }
+            case "Deadbush"->{
+                hitBox = new Rectangle(9,9,30,30);
+                hitPoints = hp;
+                texture.add(mp.tileSheet.crop(10, 0));
+                rowNumber = 1;
+                colNumber = 1;
+            }
+            case "Lilipad"->{
+                hitBox = new Rectangle(9,9,30,30);
+                hitPoints = hp;
+                texture.add(mp.tileSheet.crop(11, 1));
+                rowNumber = 1;
+                colNumber = 1;
+            }
+            case "Flower"->{
+                hitBox = new Rectangle(9,9,30,30);
+                hitPoints = hp;
+                texture.add(mp.tileSheet.crop(12, 1));
+                rowNumber = 1;
+                colNumber = 1;
+            }
+            case "Tallgrass"->{
+                hitBox = new Rectangle(9,9,30,30);
+                hitPoints = hp;
+                texture.add(mp.tileSheet.crop(10, 1));
+                texture.add(mp.tileSheet.crop(10, 2));
+                rowNumber = 2;
+                colNumber = 1;
+            }
         }
     }
 }

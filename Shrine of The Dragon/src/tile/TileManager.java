@@ -18,11 +18,13 @@ public class TileManager {
 
     public int maxWorldCol = 32;
     public int maxWorldRow = 25;
+    public int mapNumber;
 
-    public TileManager(MainPanel mp){
+    public TileManager(MainPanel mp, int i){
         this.mp = mp;
         tile = new Tile[30];
         mapTileNumber = new int[maxWorldCol][maxWorldRow];
+        mapNumber = i;
         getTileImage();
         loadMap();
     }
@@ -30,8 +32,25 @@ public class TileManager {
     public void loadMap(){
         Scanner scanner;
         try{
-            InputStream is = getClass().getResourceAsStream("/maps/map.txt");
+            InputStream is = null;
+            switch (mapNumber){
+                case 0->{
+                     is = getClass().getResourceAsStream("/maps/map.txt");
+
+                }
+                case 1->{
+                    is = getClass().getResourceAsStream("/maps/map1.txt");
+                }
+                case 2->{
+                    is = getClass().getResourceAsStream("/maps/map2.txt");
+                }
+                case 3->{
+                    is = getClass().getResourceAsStream("/maps/map3.txt");
+                }
+                default -> throw new Exception("No such map");
+            }
             scanner = new Scanner(is);
+
 
             int col = 0;
             int row = 0;
@@ -77,11 +96,30 @@ public class TileManager {
         //initTile(5, 5,0,true,false,"/tiles/house asset.png",32);
         //initTile(6, 5,1,true,false,"/tiles/house asset.png",32);
         //initTile(7, 5,2,true,false,"/tiles/house asset.png",32);
-
         initTile(4,8,0,false,false);
         initTile(5,9,0,false,false);
         initTile(6,11,0,false,false);
         initTile(7,12,0,false,false);
+
+        initTile(8,17,0,false,false);
+        initTile(9,18,0,false,false);
+        initTile(10,19,0,false,false);
+
+        initTile(11,17,1,false,false);
+        initTile(12,18,1,false,false);
+        initTile(13,19,1,false,false);
+
+        initTile(14,17,2,false,false);
+        initTile(15,18,2,false,false);
+        initTile(16,19,2,false,false);
+
+        initTile(17, 24,1,true,false);
+        initTile(18,12,8,false,false);
+
+        initTile(19,0,0,true,false, "/textures/column.png",48);
+        initTile(20,0,0,false,false, "/textures/modeletile.png",48);
+        initTile(21,11,8,false,false);
+        initTile(22,13,8,false,false);
     }
     public void initTile(int index, int x, int y, boolean collision, boolean plantable){
         tile[index] = new Tile();

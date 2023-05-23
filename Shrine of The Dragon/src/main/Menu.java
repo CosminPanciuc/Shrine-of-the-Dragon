@@ -85,4 +85,43 @@ public class Menu {
         g2.drawString("QUIT", quitButton.x + 40, quitButton.y  + 40);
         g2.draw(quitButton);
     }
+
+    public void drawInGameWon(Graphics2D g2){
+        Font fnt = new Font("arial", Font.BOLD, 50);
+        g2.setFont(fnt);
+        g2.setColor(Color.RED);
+        g2.drawString("YOU WON", mp.screenWidth/2 - 300, 100);
+
+        g2.drawString("MENU", newButton.x + 40, newButton.y + 40);
+        g2.draw(newButton);
+    }
+
+    public void drawInGameLost(Graphics2D g2){
+        Font fnt = new Font("arial", Font.BOLD, 50);
+        g2.setFont(fnt);
+        g2.setColor(Color.RED);
+        g2.drawString("YOU LOST", mp.screenWidth/2 - 300, 100);
+
+        g2.drawString("MENU", newButton.x + 40, newButton.y + 40);
+        g2.draw(newButton);
+    }
+
+    public void updateInGameWon(){
+        if(mp.mouseInput.isMouseClicked(1)){
+            if(mp.mouseInput.mouseX >= mp.screenWidth/2 - 100 && mp.mouseInput.mouseX <= mp.screenWidth/2 + 100){
+                if(mp.mouseInput.mouseY >= mp.screenHeight/2 - 150 && mp.mouseInput.mouseY <= mp.screenHeight/2 - 100){
+                    mp.currentState = MainPanel.GameState.MENU;
+                }
+            }
+        }
+    }
+    public void updateInGameLost(){
+        if(mp.mouseInput.isMouseClicked(1)){
+            if(mp.mouseInput.mouseX >= mp.screenWidth/2 - 100 && mp.mouseInput.mouseX <= mp.screenWidth/2 + 100){
+                if(mp.mouseInput.mouseY >= mp.screenHeight/2 - 150 && mp.mouseInput.mouseY <= mp.screenHeight/2 - 100){
+                    mp.currentState = MainPanel.GameState.MENU;
+                }
+            }
+        }
+    }
 }

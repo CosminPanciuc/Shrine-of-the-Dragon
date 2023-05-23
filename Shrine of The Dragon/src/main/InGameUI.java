@@ -16,18 +16,16 @@ public class InGameUI {
     BufferedImage halfHunger;
     BufferedImage emptyHunger;
 
+    BufferedImage goldSprite;
+    BufferedImage meatSprite;
+    BufferedImage skinSprite;
     BufferedImage selected = ImageLoader.LoadImage("/ui_elemets/Inventory_select.png");
 
-    SpriteSheet inventoryBar;
-
+    BufferedImage inventory;
     int selectedItem;
-    public ArrayList<BufferedImage> inventory = new ArrayList<>();
 
     public InGameUI(MainPanel mp){
-        SpriteSheet inventoryBar = new SpriteSheet(mp, ImageLoader.LoadImage("/ui_elemets/Inventory_Bar.png"));
-        for(int i = 0; i < 10; ++i){
-            inventory.add(inventoryBar.crop(i,0));
-        }
+        inventory = ImageLoader.LoadImage("/ui_elemets/inventory.png");
         this.mp = mp;
 
         fullHearth = mp.hudSprite.crop(0,0);
@@ -37,6 +35,10 @@ public class InGameUI {
         halfHunger = mp.hudSprite.crop(1,1);
         emptyHunger = mp.hudSprite.crop(2,1);
 
+        goldSprite = ImageLoader.LoadImage("/ui_elemets/gold.png");
+        meatSprite = ImageLoader.LoadImage("/ui_elemets/meat.png");
+        skinSprite = ImageLoader.LoadImage("/ui_elemets/skin.png");
+
 
         selectedItem = 1;
     }
@@ -45,8 +47,37 @@ public class InGameUI {
         drawPlayerHealth(g2);
         drawPlayerHunger(g2);
         drawInventoryBar(g2);
+        drawPlayerQuestItems(g2);
     }
 
+    public void drawPlayerQuestItems(Graphics2D g2){
+        Font fnt = new Font("arial", Font.BOLD, 15);
+        g2.setFont(fnt);
+        g2.setColor(Color.WHITE);
+        g2.drawString(String.valueOf(mp.player.gold), 20, 100);
+        g2.drawImage(goldSprite, 50,88, 16, 16, null);
+        g2.drawString(String.valueOf(mp.player.meat), 20, 120);
+        g2.drawImage(meatSprite, 50,108, 16, 16, null);
+        g2.drawString(String.valueOf(mp.player.skin), 20, 140);
+        g2.drawImage(skinSprite, 50,128, 16, 16, null);
+
+        g2.drawString("Quest: ", 10, 168);
+        switch (mp.quest){
+            case 1->{
+                g2.drawString("300", 70, 168);
+                g2.drawImage(goldSprite, 100,155, 16, 16, null);
+            }
+            case 2->{
+                g2.drawString("100", 70, 168);
+                g2.drawImage(meatSprite, 100,155, 16, 16, null);
+            }
+            case 3->{
+                g2.drawString("50", 70, 168);
+                g2.drawImage(skinSprite, 100,155, 16, 16, null);
+            }
+        }
+
+    }
     public void drawPlayerHealth(Graphics2D g2){
         BufferedImage firstHearth,secondHearth,thirdHearth,forthHearth;
         firstHearth = fullHearth;
@@ -97,30 +128,30 @@ public class InGameUI {
         int drawPositionX = 14 * mp.tileSize + mp.tileSize/2;
         int drawPositionY = mp.tileSize/2;
 
-        if(mp.player.healthPool <= 75){
+        if(mp.player.hunger <= 75){
             forthH = emptyHunger;
-        } else if( mp.player.healthPool <= 83){
+        } else if( mp.player.hunger <= 83){
             forthH = halfHunger;
         }
 
-        if(mp.player.healthPool <= 50){
+        if(mp.player.hunger <= 50){
             thirdH = emptyHunger;
         }
-        else if(mp.player.healthPool <= 62){
+        else if(mp.player.hunger <= 62){
             thirdH = halfHunger;
         }
 
-        if(mp.player.healthPool <= 25){
+        if(mp.player.hunger <= 25){
             secondH = emptyHunger;
         }
-        else if(mp.player.healthPool <= 37){
+        else if(mp.player.hunger <= 37){
             secondH = halfHunger;
         }
 
-        if(mp.player.healthPool <= 0){
+        if(mp.player.hunger <= 0){
             firstH = emptyHunger;
         }
-        else if(mp.player.healthPool <= 12){
+        else if(mp.player.hunger <= 12){
             firstH = halfHunger;
         }
 
@@ -134,8 +165,8 @@ public class InGameUI {
         int drawPositionX = mp.tileSize * 3;
         int drawPositionY = mp.tileSize * 11;
 
-        for(int i = 0; i < inventory.size(); ++i){
-            g2.drawImage(inventory.get(i), drawPositionX + (i * 48), drawPositionY, mp.tileSize, mp.tileSize, null);
+        for(int i = 0; i < 10; ++i){
+            g2.drawImage(inventory, drawPositionX + (i * 48), drawPositionY, mp.tileSize, mp.tileSize, null);
         }
     }
 }

@@ -2,6 +2,7 @@ package factory;
 
 import entity.Bear;
 import entity.MovableEntity;
+import entity.Snake;
 import main.MainPanel;
 
 public class MovableEntityFactory{
@@ -12,6 +13,7 @@ public class MovableEntityFactory{
     public MovableEntity factory(String type, int coordX, int coordY, int hp, int speed, int damage){
         switch (type){
             case "Bear" -> {return new Bear(mp,coordX,coordY,hp,speed,damage);}
+            case "Snake"-> {return new Snake(mp,coordX,coordY,hp,speed,damage);}
         }
         throw new IllegalArgumentException("Bad type");
     }

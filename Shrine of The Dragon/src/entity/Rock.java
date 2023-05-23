@@ -33,6 +33,16 @@ public class Rock extends StationaryEntity{
                 colNumber = 2;
                 hitPoints = hp;
             }
+            case "BigMossy"->{
+                hitBox = new Rectangle(14,24, 70,46);
+                texture.add(mp.tileSheet.crop(6,2));
+                texture.add(mp.tileSheet.crop(6,3));
+                texture.add(mp.tileSheet.crop(7,2));
+                texture.add(mp.tileSheet.crop(7,3));
+                rowNumber = 2;
+                colNumber = 2;
+                hitPoints = hp;
+            }
         }
         this.mp = mp;
         worldX = cordX * mp.tileSize;

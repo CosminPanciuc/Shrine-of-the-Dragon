@@ -14,6 +14,7 @@ public class StaticEntityFactory{
             case "Tree" -> {return new Tree(mp, size, coordX, coordY, hp);}
             case "Soil" -> {return new Soil(mp, coordX, coordY);}
             case "Ambient" -> {return new Ambient(mp, size, coordX, coordY, hp);}
+            case "Dragon" ->{return new Dragon(mp,coordX,coordY,hp);}
         }
         throw new IllegalArgumentException("Bad argument");
     }

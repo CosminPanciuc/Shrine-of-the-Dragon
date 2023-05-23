@@ -152,6 +152,53 @@ public class CollisionChecker {
                 movableEntity.hitBox.y = defaultObjY;
             }
         }
+
+    }
+    public void checkMobPlayer(MovableEntity entity){
+        int defaultEntityHBX = entity.hitBox.x;
+        int defaultEntityHBY = entity.hitBox.y;
+        int defaultObjX = mp.player.hitBox.x;
+        int defaultObjY = mp.player.hitBox.y;
+
+        entity.hitBox.x = entity.worldX + entity.hitBox.x;
+        entity.hitBox.y = entity.worldY + entity.hitBox.y;
+        mp.player.hitBox.x = mp.player.worldX + mp.player.hitBox.x;
+        mp.player.hitBox.y = mp.player.worldY + mp.player.hitBox.y;
+
+        switch (entity.direction) {
+            case "up" -> {
+                entity.hitBox.y -= entity.speed;
+                if (entity.hitBox.intersects(mp.player.hitBox)) {
+                    entity.collision = true;
+                }
+            }
+            case "down" -> {
+                entity.hitBox.y += entity.speed;
+                if (entity.hitBox.intersects(mp.player.hitBox)) {
+                    entity.collision = true;
+                }
+            }
+            case "right" -> {
+                entity.hitBox.x += entity.speed;
+                if (entity.hitBox.intersects(mp.player.hitBox)) {
+                    entity.collision = true;
+                }
+            }
+            case "left" -> {
+                entity.hitBox.x -= entity.speed;
+                if (entity.hitBox.intersects(mp.player.hitBox)) {
+                    entity.collision = true;
+                }
+            }
+        }
+        if(entity.collision && entity.attackCooldown == 0){
+            mp.player.healthPool -= entity.damage;
+            entity.attackCooldown = 30;
+        }
+        entity.hitBox.x = defaultEntityHBX;
+        entity.hitBox.y = defaultEntityHBY;
+        mp.player.hitBox.x = defaultObjX;
+        mp.player.hitBox.y = defaultObjY;
     }
     public void checkPlayerInteraction(Player player, String selectedTool){
         ArrayList<StationaryEntity> temp = new ArrayList<>();
@@ -198,6 +245,33 @@ public class CollisionChecker {
                             else if(Objects.equals(stationaryEntity.size, "Small"))
                                 stationaryEntity.hitPoints = stationaryEntity.hitPoints - player.pickaxeQuality;
                     }
+                    case "quest"->{
+                        if(stationaryEntity.getClass() == Dragon.class){
+                            switch (mp.quest){
+                                case 1->{
+                                    if(mp.player.gold >= 300){
+                                        mp.player.gold -= 300;
+                                        mp.quest = 2;
+                                    }
+                                }
+                                case 2->{
+                                    if(mp.player.meat >= 100){
+                                        mp.player.meat -= 100;
+                                        mp.quest = 3;
+                                    }
+                                }
+                                case 3->{
+                                    if(mp.player.skin >= 50){
+                                        mp.player.skin -= 50;
+                                        mp.quest = 4;
+                                    }
+                                }
+                                case 4->{
+                                    mp.currentState = MainPanel.GameState.WON;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             if(stationaryEntity.hitPoints <= 0){
@@ -214,6 +288,12 @@ public class CollisionChecker {
             player.hitBox.height = hitBoxHeight;
         }
         for(StationaryEntity stationaryEntity:temp){
+            if(stationaryEntity.getClass() == Tree.class){
+                player.gold += 50;
+            }
+            if(stationaryEntity.getClass() == Rock.class){
+                player.gold += 100;
+            }
             mp.levelManager.levels.get(mp.levelManager.currentLevelID).stationaryEntities.remove(stationaryEntity);
         }
     }
@@ -246,8 +326,9 @@ public class CollisionChecker {
             movableEntity.hitBox.x = movableEntity.worldX + movableEntity.hitBox.x;
             movableEntity.hitBox.y = movableEntity.worldY + movableEntity.hitBox.y;
 
-            if (entity.hitBox.intersects(movableEntity.hitBox)){
+            if (entity.hitBox.intersects(movableEntity.hitBox) && entity.attackCooldown == 0){
                 movableEntity.healthPool -= entity.damage;
+                entity.attackCooldown = 15;
                 System.out.println("I am hitting");
             }
 
@@ -267,6 +348,22 @@ public class CollisionChecker {
         }
 
         for(MovableEntity movableEntity: temp){
+            if(movableEntity.getClass() == Bear.class){
+                mp.player.meat += 50;
+                if(mp.player.hunger + 50 > 100){
+                    mp.player.hunger = 100;
+                }else{
+                    mp.player.hunger += 50;
+                }
+            }
+            if(movableEntity.getClass() == Snake.class){
+                mp.player.skin += 25;
+                if(mp.player.healthPool + 30 > 100){
+                    mp.player.healthPool = 100;
+                }else{
+                    mp.player.healthPool += 30;
+                }
+            }
             mp.levelManager.levels.get(mp.levelManager.currentLevelID).movableEntities.remove(movableEntity);
         }
     }

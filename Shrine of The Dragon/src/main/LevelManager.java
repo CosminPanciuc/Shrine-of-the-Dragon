@@ -13,14 +13,14 @@ public class LevelManager {
     public LevelManager(MainPanel mp){
         this.mp = mp;
         for(int i = 0; i < 4; ++i){
-            levels.add(new Level(mp));
+            levels.add(new Level(mp,i));
         }
         //levels.get(0).maxWorldCol = 32;
         //levels.get(0).maxWorldRow = 25;
     }
 
-    public void addLevel(){
-        Level temp = new Level(mp);
+    public void addLevel(int i){
+        Level temp = new Level(mp, i);
         levels.add(temp);
     }
 

@@ -3,14 +3,13 @@ package entity;
 import main.MainPanel;
 
 import java.awt.*;
-import java.util.Random;
 
-public class Bear extends MovableEntity{
-    public Bear(MainPanel mp, int cordX, int cordY, int hp, int speed, int damage){
+public class Snake extends MovableEntity{
+    public Snake(MainPanel mp, int cordX, int cordY, int hp, int speed, int damage){
         this.speed = speed;
         this.mp = mp;
         hitBox = new Rectangle(0,0,48,48);
-        up1 = mp.animalSheet.crop(0,19,16);
+        up1 = mp.animalSheet.crop(0,1,16);
         up1 = mp.animalSheet.scaleImage(up1,48,48);
         up2 = mp.animalSheet.crop(0,1,16);
         up2 = mp.animalSheet.scaleImage(up2,48,48);
@@ -21,9 +20,8 @@ public class Bear extends MovableEntity{
         this.damage = damage;
         attackCooldown = 0;
     }
-
     public void movement(){
-        if(Math.abs(mp.player.worldX - worldX) < 150 || Math.abs(mp.player.worldY - worldY) < 150){
+        if(Math.abs(mp.player.worldX - worldX) < 250 || Math.abs(mp.player.worldY - worldY) < 250) {
             if (mp.player.worldX > worldX) {
                 direction = "right";
             }
@@ -36,6 +34,7 @@ public class Bear extends MovableEntity{
             } else if (mp.player.worldY == worldY && mp.player.worldX == worldX) {
                 direction = "stay";
             }
+
             collision = false;
             mp.collisionChecker.checkTile(this);
             mp.collisionChecker.checkEntity(this);

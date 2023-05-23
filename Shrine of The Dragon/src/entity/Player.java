@@ -23,7 +23,11 @@ public class Player extends MovableEntity{
     public int pickaxeQuality = 1;
     boolean leftMouse = false;
 
+    int hungerCount = 0;
     public ArrayList<BufferedImage> actionImage = new ArrayList<>();
+    public int gold;
+    public int meat;
+    public int skin;
 
     public int hunger;
     public Player(MainPanel mp, KeyInput key, MouseInput mouse){
@@ -43,19 +47,22 @@ public class Player extends MovableEntity{
         setDefault();
         getPlayerImage();
     }
-    public void setPlayerStats(int coordX, int coordY, int hp, int hunger, int actionWidth, int actionHeight){
+    public void setPlayerStats(int coordX, int coordY, int hp, int hunger, int actionWidth, int actionHeight, int gold, int meat, int skin){
         worldX = coordX * mp.tileSize;
         worldY = coordY * mp.tileSize;
         healthPool = hp;
         this.hunger = hunger;
         actionArea.width = actionWidth;
         actionArea.height = actionHeight;
+        this.gold = gold;
+        this.meat = meat;
+        this.skin = skin;
     }
 
     public void setDefault(){
         worldX = mp.tileSize * 15;
         worldY = mp.tileSize * 15;
-        speed = 3;
+        speed = 4;
         direction = "down";
     }
     public void getPlayerImage(){
@@ -80,30 +87,68 @@ public class Player extends MovableEntity{
         mouseAction();
         setSelectedTool();
         playerPosition();
+        if(healthPool <= 0 || hunger <= 0){
+            mp.currentState = MainPanel.GameState.LOST;
+        }
+        playerHunger();
+        if(attackCooldown > 0){
+            attackCooldown -= 1;
+        }
     }
 
+    public void playerHunger(){
+        if(hungerCount == 300){
+            hunger--;
+            hungerCount = 0;
+        }else {
+            hungerCount++;
+        }
+    }
     public void playerPosition(){
         switch (mp.levelManager.currentLevelID){
             case 0 ->{
-                if(worldX > 25 * mp.tileSize && worldX < 27 * mp.tileSize){
+                if(worldX > 24 * mp.tileSize && worldX < 28 * mp.tileSize){
                     if(worldY > 0 && worldY < mp.tileSize/2){
                         mp.levelManager.currentLevelID = 1;
-                        worldX = 48;
-                        worldY = 48;
+                        worldY = mp.tileSize * 24 - mp.tileSize/2;
+                    }
+                }
+                if(worldX > 0  && worldX < mp.tileSize - 24){
+                    if(worldY > 19 * mp.tileSize && worldY < 22 * mp.tileSize){
+                        mp.levelManager.currentLevelID = 3;
+                        worldX = 31 * mp.tileSize;
                     }
                 }
             }
             case 1 ->{
-                worldX = 100;
-                worldY = 100;
+                if(worldX > 24 * mp.tileSize && worldX < 28 * mp.tileSize){
+                    if(worldY > 24 * mp.tileSize -24 && worldY < 25 * mp.tileSize){
+                        mp.levelManager.currentLevelID = 0;
+                        worldY = mp.tileSize + mp.tileSize/2;
+                    }
+                }
+                if(worldX > 0  && worldX < mp.tileSize - 20){
+                    if(worldY > 14 * mp.tileSize && worldY < 19 * mp.tileSize){
+                        mp.levelManager.currentLevelID = 2;
+                        worldX = 31 * mp.tileSize;
+                    }
+                }
             }
             case 2 ->{
-                worldX = 120;
-                worldY = 120;
+                if(worldX > 31 * mp.tileSize && worldX < 32 * mp.tileSize){
+                    if(worldY > 15 * mp.tileSize && worldY < 18 * mp.tileSize){
+                        mp.levelManager.currentLevelID = 1;
+                        worldX = 48;
+                    }
+                }
             }
-            case 4 ->{
-                worldX = 140;
-                worldY = 140;
+            case 3 ->{
+                if(worldX > 31 * mp.tileSize  && worldX < 32 * mp.tileSize){
+                    if(worldY > 18 * mp.tileSize && worldY < 23 * mp.tileSize){
+                        mp.levelManager.currentLevelID = 0;
+                        worldX = mp.tileSize;
+                    }
+                }
             }
         }
     }
@@ -191,6 +236,7 @@ public class Player extends MovableEntity{
             }
 
             mp.collisionChecker.checkPlayerInteraction(this, this.selectedTool);
+            mp.collisionChecker.checkPlayerInteraction(this,"quest");
             if(Objects.equals(selectedTool, "Hoe"))
                 mp.collisionChecker.checkTileHit(this);
 
@@ -200,8 +246,12 @@ public class Player extends MovableEntity{
         }
         if(mouse.isMouseClicked(2))
             System.out.println("Middle button = " + mouse.mouseX + " " + mouse.mouseY);
-        if(mouse.isMouseClicked(3))
-            System.out.println("Rigth button = " + mouse.mouseX + " " + mouse.mouseY);
+        /*
+        if(mouse.isMouseClicked(3)){
+
+        }
+
+         */
     }
 
     public void getActionDirection(){

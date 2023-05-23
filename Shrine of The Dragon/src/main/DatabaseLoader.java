@@ -53,6 +53,9 @@ public class DatabaseLoader {
                     "\t\"Hunger\"\tINTEGER,\n" +
                     "\t\"ActionWidth\"\tINTEGER,\n" +
                     "\t\"ActionHeight\"\tINTEGER\n" +
+                    "\t\"Gold\"\tINTEGER\n" +
+                    "\t\"Meat\"\tINTEGER\n" +
+                    "\t\"Skin\"\tINTEGER\n" +
                     ");");
             stmt.close();
         } catch (SQLException e) {
@@ -96,8 +99,11 @@ public class DatabaseLoader {
                 int hunger = rs.getInt("Hunger");
                 int actionWidth = rs.getInt("ActionWidth");
                 int actionHeight = rs.getInt("ActionHeight");
+                int gold = rs.getInt("Gold");
+                int meat = rs.getInt("Meat");
+                int skin = rs.getInt("Skin");
                 mp.levelManager.currentLevelID = WorldID;
-                mp.player.setPlayerStats(CoordX,CoordY,hp,hunger,actionWidth,actionHeight);
+                mp.player.setPlayerStats(CoordX,CoordY,hp,hunger,actionWidth,actionHeight,gold,meat,skin);
             stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -114,8 +120,8 @@ public class DatabaseLoader {
             stmt.executeUpdate("DELETE FROM PlayerStats;" +
                     "VACUUM;");
             int curentWorld = 0;
-            stmt.executeUpdate("INSERT INTO PlayerStats (WorldID,CoordX,CoordY,HP,Hunger,ActionWidth,ActionHeight)" +
-                    "VALUES ("+curentWorld + ", " + mp.player.worldX/48 + ", " + mp.player.worldY/48 + ", " + mp.player.healthPool + ", " + mp.player.hunger + ", " + mp.player.actionArea.width + ", " + mp.player.actionArea.height + ");");
+            stmt.executeUpdate("INSERT INTO PlayerStats (WorldID,CoordX,CoordY,HP,Hunger,ActionWidth,ActionHeight,Gold,Meat,Skin)" +
+                    "VALUES ("+curentWorld + ", " + mp.player.worldX/48 + ", " + mp.player.worldY/48 + ", " + mp.player.healthPool + ", " + mp.player.hunger + ", " + mp.player.actionArea.width + ", " + mp.player.actionArea.height + ", " + mp.player.gold + ", " + mp.player.meat + ", " + mp.player.skin + ");");
             for(Level i: mp.levelManager.levels){
                 String entityClass = null;
                 for(StationaryEntity stationaryEntity : i.stationaryEntities){

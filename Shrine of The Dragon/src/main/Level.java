@@ -12,8 +12,8 @@ public class Level {
     public TileManager tileManager;
     public ArrayList<StationaryEntity> stationaryEntities = new ArrayList<StationaryEntity>();
     public ArrayList<MovableEntity> movableEntities = new ArrayList<>();
-    public Level(MainPanel mp){
+    public Level(MainPanel mp, int i){
         this.mp = mp;
-        tileManager = new TileManager(mp);
+        tileManager = new TileManager(mp, i);
     }
 }

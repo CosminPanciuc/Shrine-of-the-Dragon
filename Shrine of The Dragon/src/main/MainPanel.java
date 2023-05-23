@@ -37,7 +37,8 @@ public class MainPanel extends JPanel implements Runnable{
     int FPS = 60;
     KeyInput keyHandler = new KeyInput(this);
 
-    MouseInput mouseInput = new MouseInput(this);
+    public MouseInput mouseInput = new MouseInput(this);
+    public int quest = 1;
     Thread gameThread;
     public StaticEntityFactory staticEntityFactory = new StaticEntityFactory(this);
     public MovableEntityFactory movableEntityFactory = new MovableEntityFactory(this);
@@ -52,7 +53,7 @@ public class MainPanel extends JPanel implements Runnable{
     public Menu menu = new Menu(this);
 
     public enum GameState{
-        MENU, PLAY, INGAMEMENU
+        MENU, PLAY, INGAMEMENU, WON, LOST
     }
     public GameState currentState = GameState.MENU;
     private MainPanel(){
@@ -107,6 +108,12 @@ public class MainPanel extends JPanel implements Runnable{
             } else if(currentState == GameState.INGAMEMENU){
                 menu.InGameMenuUpdate();
                 repaint();
+            } else if(currentState == GameState.WON){
+                menu.updateInGameWon();
+                repaint();
+            }else if(currentState == GameState.LOST){
+                menu.updateInGameLost();
+                repaint();
             }
         }
     }
@@ -144,6 +151,11 @@ public class MainPanel extends JPanel implements Runnable{
             menu.draw(g2);
         } else if(currentState == GameState.INGAMEMENU){
                 menu.drawInGameMenu(g2);
+            }else if(currentState == GameState.WON){
+                menu.drawInGameWon(g2);
+            }
+            else if(currentState == GameState.LOST){
+                menu.drawInGameLost(g2);
             }
     }
 }
